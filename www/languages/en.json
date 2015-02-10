@@ -1,0 +1,51 @@
+{
+  "HEADLINE": "Hello there, This is my awesome app!",
+  "INTRO_TEXT": "And it has i18n support!",
+  "BUTTON_TEXT_EN": "english",
+  "BUTTON_TEXT_RU": "russian",
+
+  "APP_NAME": "Tourist map Vitebsk",
+
+  "MAIN_MENU": "Main menu",
+  "MENU_HOME": "Home",
+  "MENU_LIST": "List places",
+  "MENU_ADD": "Add place",
+  "MENU_SETTINGS": "Settings",
+
+  "ROUTE_MENU": "Route menu",
+  "BUTTON_ROUTE_CLOSE": "Close route",
+
+  "PLACEHOLDER_SEARCH": "Type search query here...",
+  "CATEGORY": "Category",
+  "BUTTON_GO_TO_MAP": "Go to map",
+  "NO_PLACES": "No places",
+
+  "REQUIRED": "required",
+  "MAP_MARKER": "Click on map to drop new marker",
+  "DROP_MARKER": "You can create only one marker.\nPlease drag and drop first marker.",
+  "SELECT_PHOTO": "Select photo",
+  "CAMERA": "Camera",
+  "LIBRARY": "Library",
+  "COMPUTER": "Computer",
+  "TITLE": "Title",
+  "PLACEHOLDER_TITLE": "Type title here...",
+  "SHORT_DESCRIPTION": "Short description",
+  "PLACEHOLDER_SHORT": "Type short description here...",
+  "SELECT_CATEGORY": "Select category",
+  "LONG_DESCRIPTION": "Long description",
+  "PLACEHOLDER_LONG": "Type long description here...",
+  "UPLOADING_PHOTO": "Uploading photo...",
+  "ADDING_PLACE": "Adding place...",
+  "BUTTON_GO_BACK": "Go back",
+  "BUTTON_SUBMIT": "Submit",
+
+  "WALKING": "Walking",
+  "DRIVING": "Driving",
+
+  "RELOAD_APP": "To translate google maps please reload the application.",
+
+  "CHANGE_LANGUAGE": "Change language",
+  "ABOUT_APP": "About application",
+  "APP_DESCRIPTION": "Helper application for a tourist in the city of Vitebsk. It allows you to view on the map the most interesting places of tourist in the city. Read about them, get directions to them of the location. View all tourist destinations, find the right. And just to add a new e If it still is not on the map.",
+  "APP_FEATURES": "Application is developed in the framework of a thesis on PhoneGap. Assumes no commercial value. Available for multiple platforms:"
+}

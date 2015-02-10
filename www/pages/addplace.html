@@ -1,0 +1,90 @@
+<div class="row panel root-panel">
+    <div class="row">
+        <div class="large-6 small-12 columns">
+            <div class="radius">
+                <label>
+                    {{ 'MAP_MARKER' | translate }}:<small class="required-text">{{ 'REQUIRED' | translate }}</small>
+                    <div id="add_map_canvas" class="preview-map"></div>
+                </label>
+            </div>
+        </div>
+        <div class="large-6 small-12 columns">
+            <div class="row">
+                <label> {{ 'SELECT_PHOTO' | translate }}:</label>
+                <div class="small-12 medium-6 columns">
+                    <a class="th radius" href="">
+                        <img id="image" ng-src="img/icons/no-image.jpg" src="" />
+                    </a>
+                </div>
+                <div class="small-12 medium-6 columns" ng-show="!isPC()">
+                    <ul class="stack button-group radius">
+                        <li><a id="capturePhoto" href="" class="button success"> {{ 'CAMERA' | translate }} </a></li>
+                        <li><a id="openPhoto" href="" class="button success"> {{ 'LIBRARY' | translate }} </a></li>
+                    </ul>
+                </div>
+                <div class="small-12 medium-6 columns" ng-show="isPC()">
+                    <ul class="stack button-group radius">
+                        <div class="fileUpload button success">
+                            <span> {{ 'COMPUTER' | translate }} </span>
+                            <input id="uploadInput" type="file" class="upload" accept="image/jpeg,image/png"/>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="small-12 columns">
+            <label>
+                {{ 'TITLE' | translate }} <small class="required-text">{{ 'REQUIRED' | translate }}</small>
+                <input id="title" name="title" type="text" placeholder="{{ 'PLACEHOLDER_TITLE' | translate }}" ng-model="place.info.title" />
+            </label>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="small-12 columns">
+            <label>
+                {{ 'SHORT_DESCRIPTION' | translate }} <small class="required-text">{{ 'REQUIRED' | translate }}</small>
+                <input id="short_desc" name="short_desc" type="text" maxlength="140" placeholder="{{ 'PLACEHOLDER_SHORT' | translate }}" ng-model="place.info.description.short" />
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="small-12 columns">
+            <label>
+                {{ 'CATEGORY' | translate }} <small class="required-text">{{ 'REQUIRED' | translate }}</small>
+                <select id="category" name="category" ng-model="place.category">
+                    <option value="">{{ 'SELECT_CATEGORY' | translate }}</option>
+                    <option value="first">category 1</option>
+                    <option value="second">category 2</option>
+                    <option value="third">category 3</option>
+                    <option value="fourth">category 4</option>
+                </select>
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="small-12 columns">
+            <label>{{ 'LONG_DESCRIPTION' | translate }}
+                <textarea id="long_desc" name="long_desc" placeholder="{{ 'PLACEHOLDER_LONG' | translate }}" rows="6" ng-model="place.info.description.long"></textarea>
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="small-12 columns">
+            <div id="progressModal" class="reveal-modal" data-reveal>
+                <h3>{{ 'UPLOADING_PHOTO' | translate }}</h3>
+                <div id="progress" class="progress round text-center">
+                    <span id="statusPhoto" class="meter" style="width: 0%"></span>
+                </div>
+                <h3 id="addingPlace" style="display: none">{{ 'ADDING_PLACE' | translate }}</h3>
+                <div id="statusPlace" class="label round" style="display: none"></div>
+                <div id="spinner" class="spinner" style="display: none"></div>
+                <hr>
+                <a id="goBackButton" class="button success expand" href="#home" style="display: none"> {{ 'BUTTON_GO_BACK' | translate }} </a>
+            </div>
+            <button data-reveal-id="progressModal" id="addPlace" class="expand" ng-disabled="!(place.info.title && place.info.description.short && place.category)">{{ 'BUTTON_SUBMIT' | translate }}</button>
+        </div>
+    </div>
+</div>

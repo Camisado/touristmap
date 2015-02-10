@@ -1,0 +1,181 @@
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none !important;
+}
+
+.inherit-full-screen-height {
+    height: inherit;
+}
+
+.full-screen-width {
+    width: 100%;
+}
+
+.scrollable {
+    overflow-y: auto;
+}
+
+.root-panel {
+    margin-bottom: 0rem;
+}
+
+.preview-map {
+    /*width: 100%;*/
+    height: 400px;
+}
+
+.thumbnail-size {
+    width: inherit;
+}
+
+#screen-wrapper {
+    padding-bottom: 45px;
+}
+
+.required-text {
+    color: red;
+}
+
+.mylocation-button {
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    display: block;
+    width: 29px;
+    height: 29px;
+    overflow: hidden;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font: inherit;
+    vertical-align: baseline;
+    /*background: transparent;*/
+    list-style: none;
+    color: inherit;
+    -webkit-box-sizing: border-box;
+    -webkit-transition-duration: 0.16s;
+    -webkit-transition-property: background-color;
+    -webkit-transition-timing-function: ease-out;
+}
+
+.mylocation-button-img {
+    width: 29px;
+    height: 29px;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    background-color: #007095;
+
+    margin: 20px auto;
+    -webkit-animation: rotateplane 1.2s infinite ease-in-out;
+    animation: rotateplane 1.2s infinite ease-in-out;
+}
+
+@-webkit-keyframes rotateplane {
+    0% { -webkit-transform: perspective(120px) }
+    50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+    100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+}
+
+@keyframes rotateplane {
+    0% {
+        transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+        -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
+    } 50% {
+          transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+          -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
+      } 100% {
+            transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+            -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+        }
+}
+
+.reveal-modal {
+    overflow: scroll;
+}
+
+.info-window-content {
+    max-width: 310px;
+}
+
+div.short {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+#info_img {
+    width: 100%;
+}
+
+ul {
+    list-style: none;
+    margin: auto;
+}
+
+/* animate */
+#list_wrapper {
+    overflow: hidden;
+}
+
+.my-animation.ng-enter,
+.my-animation.ng-leave
+{
+    transition: 500ms ease-in all;
+    position: relative;
+    display: block;
+}
+
+.my-animation.ng-enter.ng-enter-active,
+.my-animation.ng-leave {
+    left: 0;
+}
+
+.my-animation.ng-leave.ng-leave-active,
+.my-animation.ng-enter {
+    left: 500px;
+}
+
+.fi-compass {
+    font-size: 40px;
+    color: #BABABA;
+}
+
+#outer {
+    width: 100%;
+    text-align: center;
+}
+
+#inner {
+    display: inline-block;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* upload button custom */
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+.fileUpload input.upload {
+    height: 59px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+/* google maps infowindow */
+/*.gm-style-iw{*/
+    /*top:initial !important;*/
+/*}*/

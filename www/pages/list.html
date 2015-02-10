@@ -1,0 +1,48 @@
+<div class="row">
+    <br>
+    <div class="small-4 columns">
+        <select ng-model="selectedFilter"
+                ng-options="myValue for myValue in selectItems"
+                ng-change="changeFilter()"
+                ng-init="selectedFilter = initSelect()">
+        </select>
+    </div>
+    <div class="small-8 columns">
+        <input type="search" ng-model="value" ng-change="changeQuery()" placeholder="{{ 'PLACEHOLDER_SEARCH' | translate }}" />
+    </div>
+</div>
+<div class="row">
+    <div id="list_wrapper" class="small-12 columns">
+        <ul>
+            <li class="my-animation panel" ng-repeat="place in list | orderBy:orderParam | filter:search as results ">
+                <div class="row">
+                    <div class="small-3 columns cursor-pointer" data-reveal-id="placeDetailsModal" ng-click="toModalDetails(place);">
+                        <img ng-src={{place.info.photo}}>
+                    </div>
+                    <div class="small-7 columns cursor-pointer" data-reveal-id="placeDetailsModal" ng-click="toModalDetails(place);">
+                        <h3>{{place.info.title}}</h3>
+                        <p>{{place.info.description.short}}</p>
+                        <p><strong>{{ 'CATEGORY' | translate }}: </strong>{{place.category}}</p>
+                    </div>
+                    <div class="small-2 columns">
+                        <button class="right" ng-click="goToMap(place.location)" >{{ 'BUTTON_GO_TO_MAP' | translate }}</button>
+                    </div>
+                </div>
+            </li>
+            <div id="placeDetailsModal" class="reveal-modal full full-screen-width" data-reveal>
+                <div class="row">
+                    <div class="small-12 columns panel">
+                        <h1>{{placeDetails.info.title}}</h1>
+                        <img ng-src={{placeDetails.info.photo}} />
+                        <p>{{placeDetails.info.description.short}}</p>
+                        <p>{{placeDetails.info.description.long}}</p>
+                        <a class="close-reveal-modal">&#215;</a>
+                    </div>
+                </div>
+            </div>
+            <li ng-if="results.length==0">
+                {{ 'NO_PLACES' | translate }}
+            </li>
+        </ul>
+    </div>
+</div>

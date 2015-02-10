@@ -1,0 +1,29 @@
+{
+  "name": "js",
+  "main": "index.js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Camisado/touristmap",
+  "authors": [
+    "Camisado <YG-92@yandex.ru>"
+  ],
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.8",
+    "angular-route": "~1.3.8",
+    "angular-animate": "~1.3.8",
+    "markerclustererplus": "~2.1.2",
+    "angular-translate": "~2.5.2",
+    "angular-translate-loader-static-files": "~2.5.2"
+  }
+}
