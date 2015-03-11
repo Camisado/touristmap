@@ -39,7 +39,7 @@ touristmapControllers.controller('HomeController', ['$scope', 'GlobalMap', 'Plac
     };
 }]);
 
-touristmapControllers.controller('ListController', ['$scope', 'Place', 'GlobalMap', function($scope, Place, GlobalMap) {
+touristmapControllers.controller('ListController', ['$scope', 'Place', 'GlobalMap', '$filter', function($scope, Place, GlobalMap, $filter) {
     $(document).foundation({
         reveal : {
             close_on_background_click: false,
@@ -48,7 +48,12 @@ touristmapControllers.controller('ListController', ['$scope', 'Place', 'GlobalMa
     });
     GlobalMap.switchRoute(false);
     $scope.list = Place.getPlaces();
-    $scope.selectItems = ["All data", "Title", "Short description", "Category"];
+    $scope.selectItems = [
+        $filter('translate')("ALL_DATA"),
+        $filter('translate')("TITLE"),
+        $filter('translate')("SHORT_DESCRIPTION"),
+        $filter('translate')("CATEGORY")
+    ];
     $scope.search = {
         $: '',
         info: {
@@ -68,19 +73,19 @@ touristmapControllers.controller('ListController', ['$scope', 'Place', 'GlobalMa
         $scope.search.info.description.short = '';
         $scope.search.category = '';
         switch ($scope.selectedFilter) {
-            case "All data": {
+            case $filter('translate')("ALL_DATA"): {
                 $scope.orderParam = 'info.title';
                 break;
             }
-            case "Title": {
+            case $filter('translate')("TITLE"): {
                 $scope.orderParam = 'info.title';
                 break;
             }
-            case "Short description": {
+            case $filter('translate')("SHORT_DESCRIPTION"): {
                 $scope.orderParam = 'info.description.short';
                 break;
             }
-            case "Category": {
+            case $filter('translate')("CATEGORY"): {
                 $scope.orderParam = 'category';
                 break;
             }
@@ -89,11 +94,11 @@ touristmapControllers.controller('ListController', ['$scope', 'Place', 'GlobalMa
 
     $scope.changeQuery = function () {
         switch ($scope.selectedFilter) {
-            case "All data": {
+            case $filter('translate')("ALL_DATA"): {
                 $scope.search.$ = $scope.value;
                 break;
             }
-            case "Title": {
+            case $filter('translate')("TITLE"): {
                 $scope.search.info = {
                     title: $scope.value,
                     description : {
@@ -102,7 +107,7 @@ touristmapControllers.controller('ListController', ['$scope', 'Place', 'GlobalMa
                 };
                 break;
             }
-            case "Short description": {
+            case $filter('translate')("SHORT_DESCRIPTION"): {
                 $scope.search.info = {
                     title: '',
                     description : {
@@ -111,7 +116,7 @@ touristmapControllers.controller('ListController', ['$scope', 'Place', 'GlobalMa
                 };
                 break;
             }
-            case "Category": {
+            case $filter('translate')("CATEGORY"): {
                 $scope.search.category = $scope.value;
                 break;
             }
@@ -120,7 +125,7 @@ touristmapControllers.controller('ListController', ['$scope', 'Place', 'GlobalMa
 
     $scope.initSelect = function () {
         $scope.orderParam = 'info.title';
-        return 'Title';
+        return $filter('translate')("ALL_DATA");
     };
 
     $scope.toModalDetails = function(place) {
@@ -132,13 +137,28 @@ touristmapControllers.controller('ListController', ['$scope', 'Place', 'GlobalMa
     }
 }]);
 
-touristmapControllers.controller('AddPlaceController', ['$scope', 'GlobalMap', 'Place',  function($scope, GlobalMap, Place) {
+touristmapControllers.controller('AddPlaceController', ['$scope', 'GlobalMap', 'Place', '$filter', 'Category', function($scope, GlobalMap, Place, $filter, Category) {
     $(document).foundation({
         reveal : {
             close_on_background_click: false,
             animation: null
         }
     });
+
+    $scope.categories = [
+        ["1", $filter('translate')("RELIGIOUS")],
+        ["2", $filter('translate')("ARCHITECTURE")],
+        ["3", $filter('translate')("SQUARES_STREETS_BRIDGER")],
+        ["4", $filter('translate')("MUSEUMS")],
+        ["5", $filter('translate')("MONUMENTS")],
+        ["6", $filter('translate')("PARKS")],
+        ["7", $filter('translate')("RIVERS")],
+        ["8", $filter('translate')("FOUNTAINS")]
+    ];
+
+    var category = Category.getCategory(1);
+    console.log(category);
+
     GlobalMap.switchRoute(false);
     var local_map = document.getElementById("add_map_canvas");
     if(local_map) {
@@ -155,10 +175,6 @@ touristmapControllers.controller('AddPlaceController', ['$scope', 'GlobalMap', '
 
     $scope.isPC = function() {
         return Platform.isPC();
-    };
-
-    $scope.isPlacedMarker = function() {
-        return GlobalMap.isPlacedMarker();
     };
 
     function onFileSelected(event) {
@@ -192,8 +208,6 @@ touristmapControllers.controller('AddPlaceController', ['$scope', 'GlobalMap', '
 
 touristmapControllers.controller('SettingsController', ['$scope', 'GlobalMap', '$translate', function($scope, GlobalMap, $translate) {
     GlobalMap.switchRoute(false);
-    $scope.pageName = 'Settings';
-    $scope.message = 'Contact us! JK. This is just a demo.';
 
     $scope.changeLanguage = function (langKey) {
         $translate.use(langKey);

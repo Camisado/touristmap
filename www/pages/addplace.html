@@ -56,10 +56,7 @@
                 {{ 'CATEGORY' | translate }} <small class="required-text">{{ 'REQUIRED' | translate }}</small>
                 <select id="category" name="category" ng-model="place.category">
                     <option value="">{{ 'SELECT_CATEGORY' | translate }}</option>
-                    <option value="first">category 1</option>
-                    <option value="second">category 2</option>
-                    <option value="third">category 3</option>
-                    <option value="fourth">category 4</option>
+                    <option ng-repeat="category in categories" value="{{category[0]}}">{{category[1]}}</option>
                 </select>
             </label>
         </div>

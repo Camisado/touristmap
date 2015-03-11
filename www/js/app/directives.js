@@ -8,3 +8,11 @@ touristmapDirectives.directive('infowindow', function(){
         templateUrl: 'pages/infowindow.html'
     }
 });
+
+touristmapDirectives.directive('placedetails', function(){
+    return {
+        restrict: 'E',
+        scope: { place: '=' },
+        templateUrl: 'pages/placedetails.html'
+    }
+});

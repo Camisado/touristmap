@@ -30,15 +30,7 @@
                 </div>
             </li>
             <div id="placeDetailsModal" class="reveal-modal full full-screen-width" data-reveal>
-                <div class="row">
-                    <div class="small-12 columns panel">
-                        <h1>{{placeDetails.info.title}}</h1>
-                        <img ng-src={{placeDetails.info.photo}} />
-                        <p>{{placeDetails.info.description.short}}</p>
-                        <p>{{placeDetails.info.description.long}}</p>
-                        <a class="close-reveal-modal">&#215;</a>
-                    </div>
-                </div>
+                <placedetails place="placeDetails"></placedetails>
             </div>
             <li ng-if="results.length==0">
                 {{ 'NO_PLACES' | translate }}

@@ -23,15 +23,16 @@
 
         <div class="small-12 columns">
             <div id="detailsModal" class="reveal-modal full full-screen-width" data-reveal>
-                <div class="row">
-                    <div class="small-12 columns panel">
-                        <h1>{{place.info.title}}</h1>
-                        <img ng-src={{place.info.photo}} />
-                        <p>{{place.info.description.short}}</p>
-                        <p>{{place.info.description.long}}</p>
-                        <a class="close-reveal-modal">&#215;</a>
-                    </div>
-                </div>
+                <placedetails place="place"></placedetails>
+                <!--<div class="row">-->
+                    <!--<div class="small-12 columns panel">-->
+                        <!--<h1>{{place.info.title}}</h1>-->
+                        <!--<img ng-src={{place.info.photo}} />-->
+                        <!--<p>{{place.info.description.short}}</p>-->
+                        <!--<p>{{place.info.description.long}}</p>-->
+                        <!--<a class="close-reveal-modal">&#215;</a>-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
         </div>
     </div>

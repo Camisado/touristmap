@@ -30,14 +30,6 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
         return mc;
     }
 
-    function isPlacedMarker() {
-        if(marker) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     function isRoute() {
         return route;
     }
@@ -84,6 +76,7 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
         }
 
         if(isDropable) {
+            marker = null;
             google.maps.event.addListener(map, 'click', function (event) {
                 placeMarker(event.latLng);
             });
@@ -205,7 +198,6 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
     return {
         getMap: getMap,
         getMC: getMC,
-        isPlacedMarker: isPlacedMarker,
         isRoute: isRoute,
         setRoute: setRoute,
         switchRoute: switchRoute,
@@ -389,7 +381,7 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', function
     }
 
     function addPlace(place) {
-        $http.post(SERVER_URL + '/add', place)
+        $http.post(SERVER_URL + '/add?collection=production', place)
             .success(function(data, status, headers, config) {
                 update = false;
                 UI.addPlaceSuccess();
@@ -400,7 +392,7 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', function
     }
 
     function getList(callback, scope) {
-        $http.get(SERVER_URL + '/list')
+        $http.get(SERVER_URL + '/list?collection=production')
             .success(function(data, status, headers, config) {
                 places = data;
                 update = true;
@@ -441,6 +433,7 @@ touristmapServices.factory('UI', [function(){
     var uploadImageSuccess = function(response) {
         var statusDiv = document.getElementById('statusPhoto');
         var progress = document.getElementById('progress');
+        console.log(response);
         statusDiv.innerHTML = "Upload successful: "+response.bytesSent+" bytes uploaded.";
         var addingPlace = document.getElementById('addingPlace');
         var spinner = document.getElementById('spinner');
@@ -509,5 +502,33 @@ touristmapServices.factory('Starter', ['GlobalMap', 'Place', function(GlobalMap,
 
     return {
         start: start
+    }
+}]);
+
+touristmapServices.factory('Category', ['$filter', function($filter){
+
+    var categories = [
+        [1, $filter('translate')("RELIGIOUS")],
+        [2, $filter('translate')("ARCHITECTURE")],
+        [3, $filter('translate')("SQUARES_STREETS_BRIDGER")],
+        [4, $filter('translate')("MUSEUMS")],
+        [5, $filter('translate')("MONUMENTS")],
+        [6, $filter('translate')("PARKS")],
+        [7, $filter('translate')("RIVERS")],
+        [8, $filter('translate')("FOUNTAINS")]
+    ];
+
+    function getCategory(key) {
+        var category = "qwe";
+        for (var i = 0; i < categories.length; i++) {
+            if (categories[i][0]===key) {
+                category = categories[i][1];
+            }
+        }
+        return category;
+    }
+
+    return {
+        getCategory: getCategory
     }
 }]);
