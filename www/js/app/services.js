@@ -30,6 +30,10 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
         return mc;
     }
 
+    function getMarker() {
+        return marker;
+    }
+
     function isRoute() {
         return route;
     }
@@ -48,7 +52,7 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
         }
     }
 
-    function initialize(id, isDropable, placeLocation) {
+    function initialize(id, isDropable, scope, placeLocation) {
         //navigator.splashscreen.show();
         var mapOptions = {
             center: new google.maps.LatLng(MyLocation.lat, MyLocation.lng),
@@ -76,6 +80,7 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
         }
 
         if(isDropable) {
+            scope.placed = false;
             marker = null;
             google.maps.event.addListener(map, 'click', function (event) {
                 placeMarker(event.latLng);
@@ -98,6 +103,8 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
                 });
                 NewPlaceLocation.lat = location.lat();
                 NewPlaceLocation.lng = location.lng();
+                scope.placed = true;
+                scope.$apply();
                 google.maps.event.addListener(marker, "dragend", function (event) {
                     NewPlaceLocation.lat = event.latLng.lat();
                     NewPlaceLocation.lng = event.latLng.lng();
@@ -127,8 +134,24 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
             var position = new google.maps.LatLng(
                 list[i].location.lat,
                 list[i].location.lng);
+            var icon;
+            switch (list[i].category) {
+                case "1": {
+                    icon = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+                    break;
+                }
+                case "2": {
+                    icon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+                    break;
+                }
+                case "3": {
+                    icon = "http://maps.google.com/mapfiles/ms/icons/pink-dot.png";
+                    break;
+                }
+            }
             var marker = new google.maps.Marker({
                 position: position,
+                icon: icon,
                 map: map
             });
             markers.push(marker);
@@ -198,6 +221,7 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
     return {
         getMap: getMap,
         getMC: getMC,
+        marker: marker,
         isRoute: isRoute,
         setRoute: setRoute,
         switchRoute: switchRoute,
@@ -297,11 +321,13 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', function
     }
 
     function onPhotoDataSuccess(imageData) {
-        var image = document.getElementById('image');
+        var image = document.getElementById('imageFromPC');
         image.src = imageData;
     }
 
-    function capturePhoto() {
+    function capturePhoto(scope) {
+        scope.photo = true;
+        scope.$apply();
         navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
             quality: 50,
             destinationType: navigator.camera.DestinationType.FILE_URI,
@@ -310,7 +336,9 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', function
         });
     }
 
-    function openPhoto() {
+    function openPhoto(scope) {
+        scope.photo = true;
+        scope.$apply();
         navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
             destinationType: window.Camera.DestinationType.FILE_URI,
             sourceType: window.Camera.PictureSourceType.PHOTOLIBRARY,
@@ -323,7 +351,7 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', function
     }
 
     function uploadPhoto (place, callback, file) {
-        var image = document.getElementById('image');
+        var image = document.getElementById('imageFromPC');
         var imageURI = image.src;
         UI.setStatusDiv("");
 
@@ -486,7 +514,7 @@ touristmapServices.factory('Starter', ['GlobalMap', 'Place', function(GlobalMap,
                 lat: routeParams.lat,
                 lng: routeParams.lng
             };
-            GlobalMap.initialize(map, false, location);
+            GlobalMap.initialize(map, false, null, location);
         } else {
             GlobalMap.initialize(map, false);
         }
@@ -508,18 +536,18 @@ touristmapServices.factory('Starter', ['GlobalMap', 'Place', function(GlobalMap,
 touristmapServices.factory('Category', ['$filter', function($filter){
 
     var categories = [
-        [1, $filter('translate')("RELIGIOUS")],
-        [2, $filter('translate')("ARCHITECTURE")],
-        [3, $filter('translate')("SQUARES_STREETS_BRIDGER")],
-        [4, $filter('translate')("MUSEUMS")],
-        [5, $filter('translate')("MONUMENTS")],
-        [6, $filter('translate')("PARKS")],
-        [7, $filter('translate')("RIVERS")],
-        [8, $filter('translate')("FOUNTAINS")]
+        ["1", $filter('translate')("RELIGIOUS")],
+        ["2", $filter('translate')("ARCHITECTURE")],
+        ["3", $filter('translate')("SQUARES_STREETS_BRIDGER")],
+        ["4", $filter('translate')("MUSEUMS")],
+        ["5", $filter('translate')("MONUMENTS")],
+        ["6", $filter('translate')("PARKS")],
+        ["7", $filter('translate')("RIVERS")],
+        ["8", $filter('translate')("FOUNTAINS")]
     ];
 
     function getCategory(key) {
-        var category = "qwe";
+        var category;
         for (var i = 0; i < categories.length; i++) {
             if (categories[i][0]===key) {
                 category = categories[i][1];
@@ -529,6 +557,7 @@ touristmapServices.factory('Category', ['$filter', function($filter){
     }
 
     return {
-        getCategory: getCategory
+        getCategory: getCategory,
+        list: categories
     }
 }]);

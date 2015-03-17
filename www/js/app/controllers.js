@@ -73,10 +73,7 @@ touristmapControllers.controller('ListController', ['$scope', 'Place', 'GlobalMa
         $scope.search.info.description.short = '';
         $scope.search.category = '';
         switch ($scope.selectedFilter) {
-            case $filter('translate')("ALL_DATA"): {
-                $scope.orderParam = 'info.title';
-                break;
-            }
+            case $filter('translate')("ALL_DATA"):
             case $filter('translate')("TITLE"): {
                 $scope.orderParam = 'info.title';
                 break;
@@ -145,28 +142,25 @@ touristmapControllers.controller('AddPlaceController', ['$scope', 'GlobalMap', '
         }
     });
 
-    $scope.categories = [
-        ["1", $filter('translate')("RELIGIOUS")],
-        ["2", $filter('translate')("ARCHITECTURE")],
-        ["3", $filter('translate')("SQUARES_STREETS_BRIDGER")],
-        ["4", $filter('translate')("MUSEUMS")],
-        ["5", $filter('translate')("MONUMENTS")],
-        ["6", $filter('translate')("PARKS")],
-        ["7", $filter('translate')("RIVERS")],
-        ["8", $filter('translate')("FOUNTAINS")]
-    ];
-
-    var category = Category.getCategory(1);
-    console.log(category);
+    $scope.categories = Category.list;
 
     GlobalMap.switchRoute(false);
+    $scope.photo = false;
     var local_map = document.getElementById("add_map_canvas");
     if(local_map) {
-        GlobalMap.initialize(local_map, true);
+        GlobalMap.initialize(local_map, true, $scope);
     }
 
     function addPlaceWrap() {
         Place.uploadPhoto($scope.place, Place.addPlace, $scope.file);
+    }
+
+    function captureWrap(){
+        Place.capturePhoto($scope);
+    }
+
+    function openWrap(){
+        Place.openPhoto($scope);
     }
 
     function goBack() {
@@ -181,11 +175,13 @@ touristmapControllers.controller('AddPlaceController', ['$scope', 'GlobalMap', '
         var selectedFile = event.target.files[0];
         var reader = new FileReader();
 
-        var imgtag = document.getElementById("image");
+        var imgtag = document.getElementById("imageFromPC");
         $scope.file = selectedFile;
 
         reader.onload = function(event) {
             imgtag.src = event.target.result;
+            $scope.photo = true;
+            $scope.$apply();
         };
 
         reader.readAsDataURL(selectedFile);
@@ -197,8 +193,8 @@ touristmapControllers.controller('AddPlaceController', ['$scope', 'GlobalMap', '
     } else {
         var capturePhoto = document.getElementById('capturePhoto');
         var openPhoto = document.getElementById('openPhoto');
-        capturePhoto.addEventListener('click', Place.capturePhoto, false);
-        openPhoto.addEventListener('click', Place.openPhoto, false);
+        capturePhoto.addEventListener('click', captureWrap, false);
+        openPhoto.addEventListener('click', openWrap, false);
     }
     var addPlace = document.getElementById('addPlace');
     var goBackButton = document.getElementById('goBackButton');

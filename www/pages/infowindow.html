@@ -2,12 +2,12 @@
     <div class="cursor-pointer" data-reveal-id="detailsModal">
         <div class="row">
             <div class="small-12 columns">
-                <h1>{{place.info.title}}</h1>
+                <h4>{{place.info.title}}</h4>
             </div>
         </div>
         <div class="row">
             <div class="small-6 columns">
-                <img id="info_img" class="thumbnail-size" ng-src={{place.info.photo}} />
+                <img class="thumbnail-size info-img" ng-src={{place.info.photo}} />
             </div>
             <div class="small-6 columns short">
                 <p>{{place.info.description.short}}</p>
@@ -24,15 +24,6 @@
         <div class="small-12 columns">
             <div id="detailsModal" class="reveal-modal full full-screen-width" data-reveal>
                 <placedetails place="place"></placedetails>
-                <!--<div class="row">-->
-                    <!--<div class="small-12 columns panel">-->
-                        <!--<h1>{{place.info.title}}</h1>-->
-                        <!--<img ng-src={{place.info.photo}} />-->
-                        <!--<p>{{place.info.description.short}}</p>-->
-                        <!--<p>{{place.info.description.long}}</p>-->
-                        <!--<a class="close-reveal-modal">&#215;</a>-->
-                    <!--</div>-->
-                <!--</div>-->
             </div>
         </div>
     </div>

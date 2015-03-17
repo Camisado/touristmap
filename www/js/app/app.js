@@ -6,6 +6,7 @@ var touristmapApp = angular.module('touristmapApp', [
     'touristmapControllers',
     'touristmapServices',
     'touristmapDirectives',
+    'touristmapFilters',
     'pascalprecht.translate'
 ]);
 

@@ -106,7 +106,7 @@ div.short {
     overflow-y: auto;
 }
 
-#info_img {
+.info-img {
     width: 100%;
 }
 
@@ -158,12 +158,11 @@ ul {
 
 /* upload button custom */
 .fileUpload {
-    position: relative;
-    overflow: hidden;
-    margin: 10px;
+    width: 100%;
 }
 .fileUpload input.upload {
-    height: 59px;
+    height: 100%;
+    width: 100%;
     position: absolute;
     top: 0;
     right: 0;
@@ -173,6 +172,15 @@ ul {
     cursor: pointer;
     opacity: 0;
     filter: alpha(opacity=0);
+}
+
+#details img {
+    display: block;
+    margin: 20px auto;
+}
+
+#details p {
+    white-space: pre-wrap;
 }
 
 /* google maps infowindow */

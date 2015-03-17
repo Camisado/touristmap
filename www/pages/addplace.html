@@ -10,25 +10,19 @@
         </div>
         <div class="large-6 small-12 columns">
             <div class="row">
-                <label> {{ 'SELECT_PHOTO' | translate }}:</label>
-                <div class="small-12 medium-6 columns">
-                    <a class="th radius" href="">
-                        <img id="image" ng-src="img/icons/no-image.jpg" src="" />
-                    </a>
-                </div>
-                <div class="small-12 medium-6 columns" ng-show="!isPC()">
-                    <ul class="stack button-group radius">
+                <label> {{ 'SELECT_PHOTO' | translate }}:<small class="required-text">{{ 'REQUIRED' | translate }}</small>{{photo}}</label>
+                <div class="small-12 columns" ng-show="!isPC()">
+                    <img id="image" ng-src="img/icons/no-image.png" src="" class="info-img" />
+                    <ul class="button-group even-2">
                         <li><a id="capturePhoto" href="" class="button success"> {{ 'CAMERA' | translate }} </a></li>
                         <li><a id="openPhoto" href="" class="button success"> {{ 'LIBRARY' | translate }} </a></li>
                     </ul>
                 </div>
-                <div class="small-12 medium-6 columns" ng-show="isPC()">
-                    <ul class="stack button-group radius">
-                        <div class="fileUpload button success">
-                            <span> {{ 'COMPUTER' | translate }} </span>
-                            <input id="uploadInput" type="file" class="upload" accept="image/jpeg,image/png"/>
-                        </div>
-                    </ul>
+                <div class="small-12 columns" ng-show="isPC()">
+                    <div class="fileUpload th radius">
+                        <img id="imageFromPC" ng-src="img/icons/no-image.png" src="" class="info-img" />
+                        <input id="uploadInput" type="file" class="upload" accept="image/jpeg,image/png"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,7 +57,7 @@
     </div>
     <div class="row">
         <div class="small-12 columns">
-            <label>{{ 'LONG_DESCRIPTION' | translate }}
+            <label>{{ 'LONG_DESCRIPTION' | translate }} <small class="required-text">{{ 'REQUIRED' | translate }}</small>
                 <textarea id="long_desc" name="long_desc" placeholder="{{ 'PLACEHOLDER_LONG' | translate }}" rows="6" ng-model="place.info.description.long"></textarea>
             </label>
         </div>
@@ -81,7 +75,29 @@
                 <hr>
                 <a id="goBackButton" class="button success expand" href="#home" style="display: none"> {{ 'BUTTON_GO_BACK' | translate }} </a>
             </div>
-            <button data-reveal-id="progressModal" id="addPlace" class="expand" ng-disabled="!(place.info.title && place.info.description.short && place.category)">{{ 'BUTTON_SUBMIT' | translate }}</button>
+
+            <!--###################################################-->
+            <div id="progressModal2" class="reveal-modal" data-reveal>
+                <div class="row">
+                    <div class="small-6 columns">
+                        <h3>{{ 'UPLOADING_PHOTO' | translate }}</h3>
+                    </div>
+                    <div class="small-6 columns">
+                        <h3 class="label right ">Done</h3>
+                    </div>
+                </div>
+
+                <div id="progress2" class="progress round text-center">
+                    <span id="statusPhoto2" class="meter" style="width: 60%"></span>
+                </div>
+                <h3 id="addingPlace2">{{ 'ADDING_PLACE' | translate }}</h3>
+                <div id="statusPlace2" class="label round" ></div>
+                <div id="spinner2" class="spinner" ></div>
+                <hr>
+                <a id="goBackButton2" class="button success expand" href="#home" > {{ 'BUTTON_GO_BACK' | translate }} </a>
+            </div>
+            <button data-reveal-id="progressModal" id="addPlace" class="expand" ng-disabled="!(place.info.title && place.info.description.short && place.category && place.info.description.long && placed && photo)">{{ 'BUTTON_SUBMIT' | translate }}</button>
+            <button data-reveal-id="progressModal2">{{ 'BUTTON_SUBMIT' | translate }}</button>
         </div>
     </div>
 </div>
