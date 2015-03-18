@@ -181,8 +181,8 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
             markers.push(marker);
 
             scope.infowindow = new google.maps.InfoWindow({
-                maxWidth: 350,
-                maxHeight: 300
+                maxWidth: 500,
+                maxHeight: 500
             });
             var contentString = '<div><infowindow></infowindow></div>';
             var compiled = $compile(contentString)(scope);

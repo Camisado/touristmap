@@ -16,15 +16,15 @@
         <ul>
             <li class="my-animation panel" ng-repeat="place in list | orderBy:orderParam | filter:search as results ">
                 <div class="row">
-                    <div class="small-3 columns cursor-pointer" data-reveal-id="placeDetailsModal" ng-click="toModalDetails(place);">
+                    <div class="small-12 medium-3 columns cursor-pointer" data-reveal-id="placeDetailsModal" ng-click="toModalDetails(place);">
                         <img ng-src={{place.info.photo}}>
                     </div>
-                    <div class="small-7 columns cursor-pointer" data-reveal-id="placeDetailsModal" ng-click="toModalDetails(place);">
+                    <div class="small-12 medium-7 columns cursor-pointer" data-reveal-id="placeDetailsModal" ng-click="toModalDetails(place);">
                         <h3>{{place.info.title}}</h3>
                         <p>{{place.info.description.short}}</p>
                         <p><strong>{{ 'CATEGORY' | translate }}: </strong>{{place.category | category}}</p>
                     </div>
-                    <div class="small-2 columns">
+                    <div class="small-12 medium-2 columns">
                         <button class="right" ng-click="goToMap(place.location)" >{{ 'BUTTON_GO_TO_MAP' | translate }}</button>
                     </div>
                 </div>
