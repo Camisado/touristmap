@@ -10,7 +10,7 @@
         </div>
         <div class="large-6 small-12 columns">
             <div class="row">
-                <label> {{ 'SELECT_PHOTO' | translate }}:<small class="required-text">{{ 'REQUIRED' | translate }}</small>{{photo}}</label>
+                <label> {{ 'SELECT_PHOTO' | translate }}:<small class="required-text">{{ 'REQUIRED' | translate }}</small></label>
                 <div class="small-12 columns" ng-show="!isPC()">
                     <img id="image" ng-src="img/icons/no-image.png" src="" class="info-img" />
                     <ul class="button-group even-2">
@@ -39,8 +39,8 @@
     <div class="row">
         <div class="small-12 columns">
             <label>
-                {{ 'SHORT_DESCRIPTION' | translate }} <small class="required-text">{{ 'REQUIRED' | translate }}</small>
-                <input id="short_desc" name="short_desc" type="text" maxlength="140" placeholder="{{ 'PLACEHOLDER_SHORT' | translate }}" ng-model="place.info.description.short" />
+                {{ 'SHORT_DESCRIPTION' | translate }}({{ 'CHARACTERS_LEFT' | translate }}: {{maxLength-place.info.description.short.length}}) <small class="required-text">{{ 'REQUIRED' | translate }}</small>
+                <input id="short_desc" name="short_desc" type="text" maxlength="{{maxLength}}" placeholder="{{ 'PLACEHOLDER_SHORT' | translate }}" ng-model="place.info.description.short" />
             </label>
         </div>
     </div>
@@ -65,39 +65,27 @@
     <div class="row">
         <div class="small-12 columns">
             <div id="progressModal" class="reveal-modal" data-reveal>
-                <h3>{{ 'UPLOADING_PHOTO' | translate }}</h3>
-                <div id="progress" class="progress round text-center">
-                    <span id="statusPhoto" class="meter" style="width: 0%"></span>
-                </div>
-                <h3 id="addingPlace" style="display: none">{{ 'ADDING_PLACE' | translate }}</h3>
-                <div id="statusPlace" class="label round" style="display: none"></div>
-                <div id="spinner" class="spinner" style="display: none"></div>
-                <hr>
-                <a id="goBackButton" class="button success expand" href="#home" style="display: none"> {{ 'BUTTON_GO_BACK' | translate }} </a>
-            </div>
-
-            <!--###################################################-->
-            <div id="progressModal2" class="reveal-modal" data-reveal>
                 <div class="row">
-                    <div class="small-6 columns">
+                    <div class="small-6 columns text-center">
                         <h3>{{ 'UPLOADING_PHOTO' | translate }}</h3>
                     </div>
-                    <div class="small-6 columns">
-                        <h3 class="label right ">Done</h3>
+                    <div class="small-6 columns text-center">
+                        <h3><div id="photoStatus" class="info label big">{{ 'STATUS_WAIT' | translate }}</div></h3>
                     </div>
                 </div>
-
-                <div id="progress2" class="progress round text-center">
-                    <span id="statusPhoto2" class="meter" style="width: 60%"></span>
+                <div class="row">
+                    <div class="small-6 columns text-center">
+                        <h3>{{ 'ADDING_PLACE' | translate }}</h3>
+                    </div>
+                    <div class="small-6 columns text-center">
+                        <h3><div id="placeStatus" class="info label big">{{ 'STATUS_WAIT' | translate }}</div></h3>
+                    </div>
                 </div>
-                <h3 id="addingPlace2">{{ 'ADDING_PLACE' | translate }}</h3>
-                <div id="statusPlace2" class="label round" ></div>
-                <div id="spinner2" class="spinner" ></div>
                 <hr>
-                <a id="goBackButton2" class="button success expand" href="#home" > {{ 'BUTTON_GO_BACK' | translate }} </a>
+                <div id="spinner" class="spinner" ></div>
+                <a id="goBackButton" class="button success expand hide" href="#home" > {{ 'BUTTON_GO_BACK' | translate }} </a>
             </div>
             <button data-reveal-id="progressModal" id="addPlace" class="expand" ng-disabled="!(place.info.title && place.info.description.short && place.category && place.info.description.long && placed && photo)">{{ 'BUTTON_SUBMIT' | translate }}</button>
-            <button data-reveal-id="progressModal2">{{ 'BUTTON_SUBMIT' | translate }}</button>
         </div>
     </div>
 </div>

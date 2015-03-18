@@ -63,7 +63,7 @@ touristmapControllers.controller('ListController', ['$scope', 'Place', 'GlobalMa
                 long: ''
             }
         },
-        category: ''
+        categoryFilter: ''
     };
 
     $scope.changeFilter = function() {
@@ -71,7 +71,7 @@ touristmapControllers.controller('ListController', ['$scope', 'Place', 'GlobalMa
         $scope.search.$ = '';
         $scope.search.info.title = '';
         $scope.search.info.description.short = '';
-        $scope.search.category = '';
+        $scope.search.categoryFilter = '';
         switch ($scope.selectedFilter) {
             case $filter('translate')("ALL_DATA"):
             case $filter('translate')("TITLE"): {
@@ -83,7 +83,7 @@ touristmapControllers.controller('ListController', ['$scope', 'Place', 'GlobalMa
                 break;
             }
             case $filter('translate')("CATEGORY"): {
-                $scope.orderParam = 'category';
+                $scope.orderParam = 'categoryFilter';
                 break;
             }
         }
@@ -114,7 +114,7 @@ touristmapControllers.controller('ListController', ['$scope', 'Place', 'GlobalMa
                 break;
             }
             case $filter('translate')("CATEGORY"): {
-                $scope.search.category = $scope.value;
+                $scope.search.categoryFilter = $scope.value;
                 break;
             }
         }
@@ -141,6 +141,8 @@ touristmapControllers.controller('AddPlaceController', ['$scope', 'GlobalMap', '
             animation: null
         }
     });
+
+    $scope.maxLength = 150;
 
     $scope.categories = Category.list;
 

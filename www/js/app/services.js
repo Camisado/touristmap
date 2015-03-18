@@ -2,6 +2,18 @@
 
 var touristmapServices = angular.module('touristmapServices', []);
 
+touristmapServices.config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.useXDomain = true;
+    /**
+     * Just setting useXDomain to true is not enough. AJAX request are also
+     * send with the X-Requested-With header, which indicate them as being
+     * AJAX. Removing the header is necessary, so the server is not
+     * rejecting the incoming request.
+     **/
+    //$httpProvider.defaults.headers.common['Access-Control-Request-Methods'] = 'POST, GET, PUT, DELETE, OPTIONS';
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+}]);
+
 touristmapServices.value('MyLocation', {
     lat: 0,
     lng: 0,
@@ -136,16 +148,28 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
                 list[i].location.lng);
             var icon;
             switch (list[i].category) {
+                //case "1": {
+                //    icon = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+                //    break;
+                //}
+                //case "2": {
+                //    icon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+                //    break;
+                //}
+                //case "3": {
+                //    icon = "http://maps.google.com/mapfiles/ms/icons/pink-dot.png";
+                //    break;
+                //}
                 case "1": {
-                    icon = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+                    icon = "img/icons/markers/1.png";
                     break;
                 }
                 case "2": {
-                    icon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+                    icon = "img/icons/markers/2.png";
                     break;
                 }
                 case "3": {
-                    icon = "http://maps.google.com/mapfiles/ms/icons/pink-dot.png";
+                    icon = "img/icons/markers/3.png";
                     break;
                 }
             }
@@ -307,7 +331,7 @@ touristmapServices.factory('MapControls', ['MyLocation', function(MyLocation){
     };
 }]);
 
-touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', function($http, NewPlaceLocation, UI){
+touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', '$filter', function($http, NewPlaceLocation, UI, $filter){
 
     var places = [];
     var update = false;
@@ -353,7 +377,6 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', function
     function uploadPhoto (place, callback, file) {
         var image = document.getElementById('imageFromPC');
         var imageURI = image.src;
-        UI.setStatusDiv("");
 
         if(file) {
             var fd = new FormData();
@@ -364,7 +387,7 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', function
             xhr.open('POST', SERVER_URL + '/upload', true);
 
             xhr.upload.onprogress = function(e) {
-                UI.uploadImageOnProgress(e);
+                UI.uploadImageOnProgress();
             };
 
             xhr.onload = function() {
@@ -373,10 +396,10 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', function
                     place.location = {};
                     place.location.lat = NewPlaceLocation.lat;
                     place.location.lng = NewPlaceLocation.lng;
-                    UI.uploadImageSuccess(this);
+                    UI.uploadImageSuccess();
                     callback(place);
                 } else {
-                    UI.uploadImageError(this.status);
+                    UI.uploadImageError();
                 }
             };
 
@@ -393,17 +416,17 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', function
             // Transfer picture to server
             var ft = new FileTransfer();
             ft.onprogress = function(progressEvent) {
-                UI.uploadImageOnProgress(progressEvent);
+                UI.uploadImageOnProgress();
             };
             ft.upload(imageURI, server, function(r) {
                 place.info.photo = r.response;
                 place.location = {};
                 place.location.lat = NewPlaceLocation.lat;
                 place.location.lng = NewPlaceLocation.lng;
-                UI.uploadImageSuccess(r);
+                UI.uploadImageSuccess();
                 callback(place);
             }, function(error) {
-                UI.uploadImageError(error.code);
+                UI.uploadImageError();
             }, options, true);
         }
     }
@@ -415,7 +438,7 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', function
                 UI.addPlaceSuccess();
             }).
             error(function(data, status, headers, config) {
-                UI.addPlaceError(status);
+                UI.addPlaceError();
             });
     }
 
@@ -423,12 +446,19 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', function
         $http.get(SERVER_URL + '/list?collection=production')
             .success(function(data, status, headers, config) {
                 places = data;
+                toCategorySearch(places);
                 update = true;
                 callback(places, scope);
             }).
             error(function(data, status, headers, config) {
                 alert('Error get list');
             });
+    }
+
+    function toCategorySearch(list) {
+        for(var i = 0; i < list.length; i++) {
+            list[i].categoryFilter = $filter('category')(list[i].category);
+        }
     }
 
     return {
@@ -442,61 +472,63 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', function
     };
 }]);
 
-touristmapServices.factory('UI', [function(){
+touristmapServices.factory('UI', ['$filter', function($filter){
 
-    var setStatusDiv = function(status) {
-        var statusDiv = document.getElementById('statusPhoto');
-        statusDiv.innerHTML = status;
-    };
+    function toProgress(element) {
+        element.className = element.className.replace( /(?:^|\s)info(?!\S)/g , 'warning' );
+        element.innerHTML = $filter('translate')("STATUS_IN_PROGRESS");
+    }
 
-    var uploadImageOnProgress = function(progressEvent) {
-        var statusDiv = document.getElementById('statusPhoto');
-        if (progressEvent.lengthComputable) {
-            var percent = Math.ceil((progressEvent.loaded / progressEvent.total)*100);
-            statusDiv.innerHTML = percent + "% / 100%";
-            statusDiv.style.width = percent + "%";
-        }
-    };
+    function toSuccess(element) {
+        element.className = element.className.replace( /(?:^|\s)warning(?!\S)/g , 'success' );
+        element.innerHTML = $filter('translate')("STATUS_SUCCESS");
+    }
 
-    var uploadImageSuccess = function(response) {
-        var statusDiv = document.getElementById('statusPhoto');
-        var progress = document.getElementById('progress');
-        console.log(response);
-        statusDiv.innerHTML = "Upload successful: "+response.bytesSent+" bytes uploaded.";
-        var addingPlace = document.getElementById('addingPlace');
-        var spinner = document.getElementById('spinner');
-        progress.className = progress.className + ' success';
-        addingPlace.style.display = 'block';
-        spinner.style.display = 'block';
-    };
+    function toError(element) {
+        element.className = element.className.replace( /(?:^|\s)warning(?!\S)/g , 'alert' );
+        element.innerHTML = $filter('translate')("STATUS_ERROR");
+    }
 
-    var uploadImageError = function(errorCode) {
-        var statusDiv = document.getElementById('statusPhoto');
-        var progress = document.getElementById('progress');
-        progress.className = progress.className + ' error';
-        statusDiv.innerHTML = "Upload failed: Code = "+errorCode;
-    };
+    function toReject(element) {
+        element.className = element.className.replace( /(?:^|\s)info(?!\S)/g , 'secondary' );
+        element.innerHTML = $filter('translate')("STATUS_REJECT");
+    }
 
-    var addPlaceSuccess = function() {
-        var statusPlace = document.getElementById('statusPlace');
-        statusPlace.innerHTML = 'Add successful: Your place will be reviewed later.';
-        var goBackButton = document.getElementById('goBackButton');
-        var spinner = document.getElementById('spinner');
-        statusPlace.className = statusPlace.className + ' success';
-        statusPlace.style.display = 'block';
-        spinner.style.display = 'none';
-        goBackButton.style.display = 'block';
-    };
+    function hide(element) {
+        element.className += " hide";
+    }
 
-    var addPlaceError = function(status) {
-        var statusPlace = document.getElementById('statusPlace');
-        statusPlace.className = statusPlace.className + ' error';
-        statusPlace.style.display = 'block';
-        statusPlace.innerHTML = "Add failed: Status = " + status;
-    };
+    function show(element) {
+        element.className = element.className.replace( /(?:^|\s)hide(?!\S)/g , '' );
+    }
+
+    function uploadImageOnProgress() {
+        toProgress(document.getElementById('photoStatus'));
+    }
+
+    function uploadImageSuccess() {
+        toSuccess(document.getElementById('photoStatus'));
+        toProgress(document.getElementById('placeStatus'));
+    }
+
+    function uploadImageError() {
+        toError(document.getElementById('photoStatus'));
+        toReject(document.getElementById('placeStatus'));
+    }
+
+    function addPlaceSuccess() {
+        toSuccess(document.getElementById('placeStatus'));
+        hide(document.getElementById('spinner'));
+        show(document.getElementById('goBackButton'));
+    }
+
+    function addPlaceError() {
+        toError(document.getElementById('placeStatus'));
+        hide(document.getElementById('spinner'));
+        show(document.getElementById('goBackButton'));
+    }
 
     return {
-        setStatusDiv: setStatusDiv,
         uploadImageOnProgress: uploadImageOnProgress,
         uploadImageSuccess: uploadImageSuccess,
         uploadImageError: uploadImageError,
