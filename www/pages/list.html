@@ -22,7 +22,7 @@
                     <div class="small-12 medium-7 columns cursor-pointer" data-reveal-id="placeDetailsModal" ng-click="toModalDetails(place);">
                         <h3>{{place.info.title}}</h3>
                         <p>{{place.info.description.short}}</p>
-                        <p><strong>{{ 'CATEGORY' | translate }}: </strong>{{place.category | category}}</p>
+                        <p><category></category></p>
                     </div>
                     <div class="small-12 medium-2 columns">
                         <button class="right" ng-click="goToMap(place.location)" >{{ 'BUTTON_GO_TO_MAP' | translate }}</button>

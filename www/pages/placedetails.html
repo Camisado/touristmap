@@ -1,10 +1,10 @@
 <div id="details" class="row">
     <div class="small-12 columns panel">
         <h1>{{place.info.title}}</h1>
-        <img ng-src={{place.info.photo}} />
+        <img id="photo" ng-src={{place.info.photo}} />
         <p>{{place.info.description.short}}</p>
         <p>{{place.info.description.long}}</p>
-        <p><strong>{{ 'CATEGORY' | translate }}: </strong>{{place.category | category}}</p>
+        <p><category></category></p>
         <a class="close-reveal-modal">&#215;</a>
     </div>
 </div>

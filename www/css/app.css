@@ -165,9 +165,15 @@ ul {
     filter: alpha(opacity=0);
 }
 
-#details img {
+#details #photo {
     display: block;
     margin: 20px auto;
+}
+
+#marker {
+    display: inline-block;
+    width: 25px;
+    height: 35px;
 }
 
 #details p {

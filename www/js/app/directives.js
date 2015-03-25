@@ -16,3 +16,10 @@ touristmapDirectives.directive('placedetails', function(){
         templateUrl: 'pages/placedetails.html'
     }
 });
+
+touristmapDirectives.directive('category', function(){
+    return {
+        restrict: 'E',
+        templateUrl: 'pages/category.html'
+    }
+});
