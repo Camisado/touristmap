@@ -148,18 +148,6 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
                 list[i].location.lng);
             var icon;
             switch (list[i].category) {
-                //case "1": {
-                //    icon = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
-                //    break;
-                //}
-                //case "2": {
-                //    icon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
-                //    break;
-                //}
-                //case "3": {
-                //    icon = "http://maps.google.com/mapfiles/ms/icons/pink-dot.png";
-                //    break;
-                //}
                 case "1": {
                     icon = "img/icons/markers/1.png";
                     break;
@@ -172,10 +160,37 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
                     icon = "img/icons/markers/3.png";
                     break;
                 }
+                case "4": {
+                    icon = "img/icons/markers/4.png";
+                    break;
+                }
+                case "5": {
+                    icon = "img/icons/markers/5.png";
+                    break;
+                }
+                case "6": {
+                    icon = "img/icons/markers/6.png";
+                    break;
+                }
+                case "7": {
+                    icon = "img/icons/markers/7.png";
+                    break;
+                }
+                case "8": {
+                    icon = "img/icons/markers/8.png";
+                    break;
+                }
             }
+            var pinIcon = new google.maps.MarkerImage(
+                icon,
+                null, /* size is determined at runtime */
+                null, /* origin is 0,0 */
+                null, /* anchor is bottom center of the scaled image */
+                new google.maps.Size(30, 45)
+            );
             var marker = new google.maps.Marker({
                 position: position,
-                icon: icon,
+                icon: pinIcon,
                 map: map
             });
             markers.push(marker);
