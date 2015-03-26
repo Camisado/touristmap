@@ -66,32 +66,55 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
 
     function initialize(id, isDropable, scope, placeLocation) {
         //navigator.splashscreen.show();
-        var mapOptions = {
-            center: new google.maps.LatLng(MyLocation.lat, MyLocation.lng),
+
+        //var mapOptions = {
+        //    center: new google.maps.LatLng(MyLocation.lat, MyLocation.lng),
+        //    zoom: 15,
+        //    mapTypeId: google.maps.MapTypeId.ROADMAP,
+        //    panControl: false,
+        //    zoomControl: true,
+        //    mapTypeControl: true,
+        //    scaleControl: false,
+        //    streetViewControl: false,
+        //    overviewMapControl: false
+        //};
+        //
+        //map = new google.maps.Map(id, mapOptions);
+        //var homeControlDiv = document.createElement('div');
+        //var myLocationControl = new MapControls.myLocationControl(homeControlDiv, map);
+        //homeControlDiv.index = 1;
+        //map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(homeControlDiv);
+
+        map = new ymaps.Map(id, {
+            center: [MyLocation.lat, MyLocation.lng],
             zoom: 15,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            panControl: false,
-            zoomControl: true,
-            mapTypeControl: true,
-            scaleControl: false,
-            streetViewControl: false,
-            overviewMapControl: false
-        };
+            controls: []
+        });
 
-        map = new google.maps.Map(id, mapOptions);
-        var homeControlDiv = document.createElement('div');
-        var myLocationControl = new MapControls.myLocationControl(homeControlDiv, map);
-        homeControlDiv.index = 1;
-        map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(homeControlDiv);
+        //map.controls
+        //    .remove('rulerControl')
+        //    .remove('fullscreenControl')
+        //    .remove('searchControl')
+        //    .remove('typeSelector');
+
+        map.controls.add('geolocationControl', {float:'none', position:{bottom:30, right:10}});
+        map.controls.add('rulerControl', {float:'none', position:{bottom:30, left:10}});
+        map.controls.add(new ymaps.control.TypeSelector(['yandex#map', 'yandex#hybrid']), {float:'right'});
+
+        ymaps.geolocation.get({
+            mapStateAutoApply: true
+        }).then(function (result) {
+            map.geoObjects.add(result.geoObjects);
+        });
 
 
-        if(placeLocation) {
-            goToPlace(placeLocation);
-        } else {
-            myLocationControl.getMyPosition();
-        }
+        //if(placeLocation) {
+        //    goToPlace(placeLocation);
+        //} else {
+        //    myLocationControl.getMyPosition();
+        //}
 
-        if(isDropable) {
+        /*if(isDropable) {
             scope.placed = false;
             marker = null;
             google.maps.event.addListener(map, 'click', function (event) {
@@ -136,7 +159,7 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
             if(mc) {
                 mc.repaint();
             }
-        });
+        });*/
     }
 
     function showMarkers(list, scope) {
@@ -567,11 +590,11 @@ touristmapServices.factory('Starter', ['GlobalMap', 'Place', function(GlobalMap,
         if (GlobalMap.isRoute()) {
             GlobalMap.switchRoute(true);
         }
-        if (!Place.isUpdated()) {
-            Place.getList(GlobalMap.showMarkers, scope);
-        } else {
-            GlobalMap.showMarkers(Place.getPlaces(), scope);
-        }
+        //if (!Place.isUpdated()) {
+        //    Place.getList(GlobalMap.showMarkers, scope);
+        //} else {
+        //    GlobalMap.showMarkers(Place.getPlaces(), scope);
+        //}
     }
 
     return {

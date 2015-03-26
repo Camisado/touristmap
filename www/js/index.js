@@ -76,6 +76,8 @@ var app = {
 
 var GLOBAL_LANGUAGE;
 
+var MAP = false;
+
 var SERVER_URL = 'https://touristmapserver.herokuapp.com';
 
 var Platform = {
