@@ -360,7 +360,7 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', '$filter
     }
 
     function onPhotoDataSuccess(imageData) {
-        var image = document.getElementById('imageFromPC');
+        var image = document.getElementById('image');
         image.src = imageData;
     }
 
@@ -390,9 +390,6 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', '$filter
     }
 
     function uploadPhoto (place, callback, file) {
-        var image = document.getElementById('imageFromPC');
-        var imageURI = image.src;
-
         if(file) {
             var fd = new FormData();
             fd.append("file", file); // Append the file
@@ -420,6 +417,8 @@ touristmapServices.factory('Place', ['$http', 'NewPlaceLocation', 'UI', '$filter
 
             xhr.send(fd);
         } else {
+            var image = document.getElementById('image');
+            var imageURI = image.src;
             var options = new FileUploadOptions();
             options.fileKey="file";
             options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
