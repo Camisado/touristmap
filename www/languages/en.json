@@ -49,6 +49,7 @@
   "RELOAD_APP": "To translate google maps please reload the application.",
 
   "CHANGE_LANGUAGE": "Change language",
+  "CHANGE_MAP": "Change map",
   "ABOUT_APP": "About application",
   "APP_DESCRIPTION": "Helper application for a tourist in the city of Vitebsk. It allows you to view on the map the most interesting places of tourist in the city. Read about them, get directions to them of the location. View all tourist destinations, find the right. And just to add a new e If it still is not on the map.",
   "APP_FEATURES": "Application is developed in the framework of a thesis on PhoneGap. Assumes no commercial value. Available for multiple platforms:",

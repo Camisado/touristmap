@@ -1,9 +1,19 @@
 <div class="row panel">
     <div class="row">
-        <div class="small-12 columns">
+        <div class="small-6 columns">
             <h2>{{ 'CHANGE_LANGUAGE' | translate }}:</h2>
-            <a href="" ng-click="changeLanguage('ru')" ><img src="../www/img/icons/Russia.png"></a>
-            <a href="" ng-click="changeLanguage('en')" ><img src="../www/img/icons/United-Kingdom.png"></a>
+            <a href="" ng-click="language='ru'" ><img src="../www/img/icons/Russia.png"></a>
+            <a href="" ng-click="language='en'" ><img src="../www/img/icons/United-Kingdom.png"></a>
+        </div>
+        <div class="small-6 columns">
+            <h2>{{ 'CHANGE_MAP' | translate }}:</h2>
+            <a href="" ng-click="map='google'" ><img src="../www/img/icons/United-Kingdom.png"></a>
+            <a href="" ng-click="map='yandex'" ><img src="../www/img/icons/Russia.png"></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="small-12 columns">
+            <button ng-click="applySettings()">apply</button>
         </div>
     </div>
     <hr>

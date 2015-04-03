@@ -25,6 +25,22 @@ var app = {
     initialize: function() {
         this.bindEvents();
     },
+
+    checkLocalStorage: function() {
+        if(localStorage.getItem('language')) {
+            GLOBAL_LANGUAGE = localStorage.getItem('language');
+        } else {
+            localStorage.setItem('language', 'en');
+            GLOBAL_LANGUAGE = 'en';
+        }
+
+        if(localStorage.getItem('map')) {
+            GLOBAL_MAP = localStorage.getItem('map');
+        } else {
+            localStorage.setItem('map', 'google');
+            GLOBAL_MAP = 'google';
+        }
+    },
     // Bind Event Listeners
     //
     // Bind any events that are required on startup. Common events are:
@@ -51,12 +67,6 @@ var app = {
         }
 
         function loadApp(deviceReadyFunc) {
-            if(localStorage.getItem('language')) {
-                GLOBAL_LANGUAGE = localStorage.getItem('language');
-            } else {
-                localStorage.setItem('language', 'en');
-                GLOBAL_LANGUAGE = 'en';
-            }
 
             loadMap(GLOBAL_LANGUAGE);
 
@@ -76,7 +86,7 @@ var app = {
 
 var GLOBAL_LANGUAGE;
 
-var MAP = false;
+var GLOBAL_MAP;
 
 var SERVER_URL = 'https://touristmapserver.herokuapp.com';
 

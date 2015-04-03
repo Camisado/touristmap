@@ -25,14 +25,66 @@ touristmapServices.value('NewPlaceLocation', {
     lng: 0
 });
 
-touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceLocation', '$compile', '$filter', function(MyLocation, MapControls, NewPlaceLocation, $compile, $filter){
+touristmapServices.factory('GlobalMap', ['GoogleMap', 'YandexMap', function(GoogleMap, YandexMap){
+
+    var currentMap;
+
+    if (GLOBAL_MAP==='google') {
+        console.log('google');
+        currentMap = GoogleMap;
+    }
+    if (GLOBAL_MAP==='yandex') {
+        console.log('yandex');
+        currentMap = YandexMap;
+    }
+
+    function isRoute() {
+        return currentMap.isRoute();
+    }
+
+    function setRoute(new_route) {
+        currentMap.setRoute(new_route);
+    }
+
+    function switchRoute(route) {
+        currentMap.switchRoute(route);
+    }
+
+    function initialize(id, isDropable, scope, placeLocation) {
+        currentMap.initialize(id, isDropable, scope, placeLocation);
+    }
+
+    function showMarkers(list, scope) {
+        currentMap.showMarkers(list, scope);
+    }
+
+    function calcRoute(start, end, type) {
+        currentMap.calcRoute(start, end, type);
+    }
+
+    function closeRoute() {
+        currentMap.closeRoute();
+    }
+
+    return {
+        isRoute: isRoute,
+        setRoute: setRoute,
+        switchRoute: switchRoute,
+        initialize: initialize,
+        showMarkers: showMarkers,
+        calcRoute: calcRoute,
+        closeRoute:closeRoute
+    };
+}]);
+
+touristmapServices.factory('GoogleMap', ['MyLocation', 'MapControls', 'NewPlaceLocation', '$compile', '$filter', function(MyLocation, MapControls, NewPlaceLocation, $compile, $filter){
 
     var map;
     var mc;
     var marker;
+    var route;
     var directionsDisplay = new google.maps.DirectionsRenderer();
     var directionsService = new google.maps.DirectionsService();
-    var route;
 
     function getMap() {
         return map;
@@ -40,10 +92,6 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
 
     function getMC() {
         return mc;
-    }
-
-    function getMarker() {
-        return marker;
     }
 
     function isRoute() {
@@ -65,56 +113,31 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
     }
 
     function initialize(id, isDropable, scope, placeLocation) {
-        //navigator.splashscreen.show();
-
-        //var mapOptions = {
-        //    center: new google.maps.LatLng(MyLocation.lat, MyLocation.lng),
-        //    zoom: 15,
-        //    mapTypeId: google.maps.MapTypeId.ROADMAP,
-        //    panControl: false,
-        //    zoomControl: true,
-        //    mapTypeControl: true,
-        //    scaleControl: false,
-        //    streetViewControl: false,
-        //    overviewMapControl: false
-        //};
-        //
-        //map = new google.maps.Map(id, mapOptions);
-        //var homeControlDiv = document.createElement('div');
-        //var myLocationControl = new MapControls.myLocationControl(homeControlDiv, map);
-        //homeControlDiv.index = 1;
-        //map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(homeControlDiv);
-
-        map = new ymaps.Map(id, {
-            center: [MyLocation.lat, MyLocation.lng],
+        var mapOptions = {
+            center: new google.maps.LatLng(MyLocation.lat, MyLocation.lng),
             zoom: 15,
-            controls: []
-        });
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            panControl: false,
+            zoomControl: true,
+            mapTypeControl: true,
+            scaleControl: false,
+            streetViewControl: false,
+            overviewMapControl: false
+        };
 
-        //map.controls
-        //    .remove('rulerControl')
-        //    .remove('fullscreenControl')
-        //    .remove('searchControl')
-        //    .remove('typeSelector');
+        map = new google.maps.Map(id, mapOptions);
+        var homeControlDiv = document.createElement('div');
+        var myLocationControl = new MapControls.myLocationControl(homeControlDiv, map);
+        homeControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(homeControlDiv);
 
-        map.controls.add('geolocationControl', {float:'none', position:{bottom:30, right:10}});
-        map.controls.add('rulerControl', {float:'none', position:{bottom:30, left:10}});
-        map.controls.add(new ymaps.control.TypeSelector(['yandex#map', 'yandex#hybrid']), {float:'right'});
+        if(placeLocation) {
+            goToPlace(placeLocation);
+        } else {
+            myLocationControl.getMyPosition();
+        }
 
-        ymaps.geolocation.get({
-            mapStateAutoApply: true
-        }).then(function (result) {
-            map.geoObjects.add(result.geoObjects);
-        });
-
-
-        //if(placeLocation) {
-        //    goToPlace(placeLocation);
-        //} else {
-        //    myLocationControl.getMyPosition();
-        //}
-
-        /*if(isDropable) {
+        if(isDropable) {
             scope.placed = false;
             marker = null;
             google.maps.event.addListener(map, 'click', function (event) {
@@ -124,6 +147,13 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
             directionsDisplay.setMap(map);
             directionsDisplay.setPanel(document.getElementById('directions-panel'));
         }
+
+        google.maps.event.addListener(map, 'zoom_changed', function() {
+            google.maps.event.trigger(map, 'resize');
+            if(mc) {
+                mc.repaint();
+            }
+        });
 
         function placeMarker(location) {
             if (marker) {
@@ -153,13 +183,6 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
             map.panTo(pos);
             map.setZoom(17);
         }
-
-        google.maps.event.addListener(map, 'zoom_changed', function() {
-            google.maps.event.trigger(map, 'resize');
-            if(mc) {
-                mc.repaint();
-            }
-        });*/
     }
 
     function showMarkers(list, scope) {
@@ -283,7 +306,240 @@ touristmapServices.factory('GlobalMap', ['MyLocation', 'MapControls', 'NewPlaceL
     return {
         getMap: getMap,
         getMC: getMC,
-        marker: marker,
+        isRoute: isRoute,
+        setRoute: setRoute,
+        switchRoute: switchRoute,
+        initialize: initialize,
+        showMarkers: showMarkers,
+        calcRoute: calcRoute,
+        closeRoute:closeRoute
+    };
+}]);
+
+touristmapServices.factory('YandexMap', ['MyLocation', 'MapControls', 'NewPlaceLocation', '$compile', '$filter', function(MyLocation, MapControls, NewPlaceLocation, $compile, $filter){
+
+    var map;
+    var mc;
+    var marker;
+    var route;
+    var directionsDisplay = new google.maps.DirectionsRenderer();
+    var directionsService = new google.maps.DirectionsService();
+
+    function getMap() {
+        return map;
+    }
+
+    function getMC() {
+        return mc;
+    }
+
+    function isRoute() {
+        return route;
+    }
+
+    function setRoute(new_route) {
+        route = new_route;
+        switchRoute(new_route);
+    }
+
+    function switchRoute(route) {
+        var route_panel = document.getElementById('route_panel');
+        if(route) {
+            route_panel.className = '';
+        } else {
+            route_panel.className = 'hide';
+        }
+    }
+
+    function initialize(id, isDropable, scope, placeLocation) {
+
+        ymaps.geolocation.get({
+            mapStateAutoApply: true
+        }).then(function (result) {
+            map = new ymaps.Map(id, {
+                center: [result.geoObjects.position[0], result.geoObjects.position[1]],
+                zoom: 15,
+                controls: []
+            });
+            map.geoObjects.add(result.geoObjects);
+            map.setZoom(15);
+            map.controls.add('geolocationControl', {float:'none', position:{bottom:30, right:10}});
+            map.controls.add('rulerControl', {float:'none', position:{bottom:30, left:10}});
+            map.controls.add(new ymaps.control.TypeSelector(['yandex#map', 'yandex#hybrid']), {float:'right'});
+            //map.controls
+            //    .remove('rulerControl')
+            //    .remove('fullscreenControl')
+            //    .remove('searchControl')
+            //    .remove('typeSelector');
+        });
+
+
+        function placeMarker(location) {
+            if (marker) {
+                //marker.setPosition(location);
+                alert($filter('translate')("DROP_MARKER"));
+            } else {
+                marker = new google.maps.Marker({
+                    position: location,
+                    draggable: true,
+                    animation: google.maps.Animation.DROP,
+                    map: map
+                });
+                NewPlaceLocation.lat = location.lat();
+                NewPlaceLocation.lng = location.lng();
+                scope.placed = true;
+                scope.$apply();
+                google.maps.event.addListener(marker, "dragend", function (event) {
+                    NewPlaceLocation.lat = event.latLng.lat();
+                    NewPlaceLocation.lng = event.latLng.lng();
+                });
+            }
+        }
+
+        //function goToPlace(location) {
+        //    var pos = new google.maps.LatLng(location.lat,
+        //        location.lng);
+        //    map.panTo(pos);
+        //    map.setZoom(17);
+        //}
+    }
+
+    function showMarkers(list, scope) {
+        var markers = [];
+
+        var contentString = '<div><infowindow></infowindow></div>';
+        var compiled = $compile(contentString)(scope);
+
+        var balloon = new ymaps.Balloon(map, {
+            closeButton: false,
+            minWidth: 500,
+            minHeight: 500
+        });
+
+        console.log(map.options);
+        //balloon.options.setParent(map.options);
+        //balloon.options.closeButton = false;
+        //balloon.options.minWidth = 500;
+        //balloon.options.minHeight = 500;
+        console.log(balloon.options);
+
+
+        for(var i = 0; i < list.length; i++) {
+            var icon;
+            switch (list[i].category) {
+                case "1": {
+                    icon = "img/icons/markers/1.png";
+                    break;
+                }
+                case "2": {
+                    icon = "img/icons/markers/2.png";
+                    break;
+                }
+                case "3": {
+                    icon = "img/icons/markers/3.png";
+                    break;
+                }
+                case "4": {
+                    icon = "img/icons/markers/4.png";
+                    break;
+                }
+                case "5": {
+                    icon = "img/icons/markers/5.png";
+                    break;
+                }
+                case "6": {
+                    icon = "img/icons/markers/6.png";
+                    break;
+                }
+                case "7": {
+                    icon = "img/icons/markers/7.png";
+                    break;
+                }
+                case "8": {
+                    icon = "img/icons/markers/8.png";
+                    break;
+                }
+            }
+
+            markers[i] = new ymaps.Placemark([list[i].location.lat, list[i].location.lng], {
+                //balloonContent: compiled[0].innerHTML
+            }, {
+                iconLayout: 'default#image',
+                iconImageHref: icon,
+                iconImageSize: [30, 45]
+            });
+
+            markers[i].events.add("click", (function(place, scope, marker) {
+                return function() {
+                    scope.place = place;
+                    scope.$apply();
+                    marker.balloon.open();
+                    marker.properties.set('balloonContent', compiled[0].innerHTML);
+                };
+            })(list[i], scope, markers[i]));
+
+            markers[i].events.add("balloonopen", function (event) {
+                $(document).foundation({
+                    reveal: {
+                        close_on_background_click: false,
+                        animation: null
+                    }
+                });
+            });
+        }
+
+        map.events.add("click", function(e) {
+            console.log('qwe');
+            balloon.open(map.getCenter());
+            //map.balloon.open(
+            //    // Позиция балуна
+            //    e.get("coords"), {
+            //        // Свойства балуна:
+            //        // контент балуна
+            //        contentBody: "Значение: " + e.get("coords")
+            //    }
+            //)
+        });
+
+        var clusterer = new ymaps.Clusterer();
+        clusterer.add(markers);
+        map.geoObjects.add(clusterer);
+
+        if(!Platform.isPC()) {
+            spinnerplugin.hide();
+        }
+    }
+
+    function calcRoute(start, end, type) {
+        directionsDisplay.setMap(map);
+        directionsDisplay.setPanel(document.getElementById('directions-panel'));
+        var request = {
+            origin:start.lat + ',' + start.lng,
+            destination:end.lat + ',' + end.lng,
+            travelMode: google.maps.TravelMode[type]
+        };
+        directionsService.route(request, function(response, status) {
+            if (status === google.maps.DirectionsStatus.OK) {
+                //document.getElementById('directions-panel').innerHTML = '';
+                directionsDisplay.setDirections(response);
+                google.maps.event.trigger(map, 'resize');
+                setRoute(true);
+            } else {
+                setRoute(false);
+            }
+        });
+    }
+
+    function closeRoute() {
+        directionsDisplay.setMap(null);
+        directionsDisplay.setPanel(null);
+        directionsDisplay = new google.maps.DirectionsRenderer();
+        directionsService = new google.maps.DirectionsService();
+    }
+
+    return {
+        getMap: getMap,
+        getMC: getMC,
         isRoute: isRoute,
         setRoute: setRoute,
         switchRoute: switchRoute,
@@ -325,7 +581,8 @@ touristmapServices.factory('MapControls', ['MyLocation', function(MyLocation){
                 var marker = new google.maps.Marker({
                     position: myPos,
                     title: "I'm here!",
-                    icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                    icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                    zIndex: 99999
                 });
                 if(MyLocation.marker === null) {
                     marker.setMap(map);
@@ -583,18 +840,20 @@ touristmapServices.factory('Starter', ['GlobalMap', 'Place', function(GlobalMap,
                 lat: routeParams.lat,
                 lng: routeParams.lng
             };
-            GlobalMap.initialize(map, false, null, location);
-        } else {
-            GlobalMap.initialize(map, false);
+            //GlobalMap.initialize(map, false, null, location);
         }
+        GlobalMap.initialize(map, false, null, location);
+        //else {
+        //    GlobalMap.initialize(map, false);
+        //}
         if (GlobalMap.isRoute()) {
             GlobalMap.switchRoute(true);
         }
-        //if (!Place.isUpdated()) {
-        //    Place.getList(GlobalMap.showMarkers, scope);
-        //} else {
-        //    GlobalMap.showMarkers(Place.getPlaces(), scope);
-        //}
+        if (!Place.isUpdated()) {
+            Place.getList(GlobalMap.showMarkers, scope);
+        } else {
+            GlobalMap.showMarkers(Place.getPlaces(), scope);
+        }
     }
 
     return {

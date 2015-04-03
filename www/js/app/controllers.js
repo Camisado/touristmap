@@ -207,12 +207,26 @@ touristmapControllers.controller('AddPlaceController', ['$scope', 'GlobalMap', '
 touristmapControllers.controller('SettingsController', ['$scope', 'GlobalMap', '$translate', function($scope, GlobalMap, $translate) {
     GlobalMap.switchRoute(false);
 
-    $scope.changeLanguage = function (langKey) {
+    $scope.language = GLOBAL_LANGUAGE;
+    $scope.map = GLOBAL_MAP;
+
+    function changeLanguage(langKey) {
         $translate.use(langKey);
-        //alert($filter('translate')("RELOAD_APP"));
+        GLOBAL_LANGUAGE = langKey;
         localStorage.setItem('language', langKey);
+    }
+
+    function changeMap(mapKey) {
+        GLOBAL_MAP = $scope.map;
+        localStorage.setItem('map', mapKey);
+    }
+
+    $scope.applySettings = function() {
+        console.log($scope.language, $scope.map);
+        changeLanguage($scope.language);
+        changeMap($scope.map);
         app.reloadApp();
-    };
+    }
 }]);
 
 touristmapControllers.controller('NotFoundController', ['$scope', 'GlobalMap', function($scope, GlobalMap) {

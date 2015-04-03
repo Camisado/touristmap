@@ -79,7 +79,7 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
         <!--<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true&language=ru"></script>-->
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-        <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU&load=package.full" type="text/javascript"></script>
+        <!--<script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU&load=package.full" type="text/javascript"></script>-->
         <script src="bower_components/markerclustererplus/src/markerclusterer.js"></script>
 
         <script src="js/app/app.js"></script>
@@ -94,10 +94,22 @@
 
 
         <script type="text/javascript">
-            ymaps.ready(init);
+            app.checkLocalStorage();
+            var script=document.createElement('script');
+            if (GLOBAL_LANGUAGE === 'en') {
+                script.src = 'http://api-maps.yandex.ru/2.1/?lang=en_US';
+            } else {
+                script.src = 'http://api-maps.yandex.ru/2.1/?lang=ru_RU';
+            }
+            document.getElementsByTagName('body')[0].appendChild(script);
+            script.onload = function() {
+                ymaps.ready(init);
+            };
+
             function init() {
                 app.initialize();
             }
+
             $(document).foundation({
                 offcanvas : {
                     // Sets method in which offcanvas opens.
