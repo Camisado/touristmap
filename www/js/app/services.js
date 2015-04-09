@@ -51,10 +51,12 @@ touristmapServices.factory('GlobalMap', ['GoogleMap', 'YandexMap', function(Goog
     }
 
     function initialize(id, isDropable, scope, placeLocation) {
+        console.log("init");
         currentMap.initialize(id, isDropable, scope, placeLocation);
     }
 
     function showMarkers(list, scope) {
+        console.log("show");
         currentMap.showMarkers(list, scope);
     }
 
@@ -113,6 +115,7 @@ touristmapServices.factory('GoogleMap', ['MyLocation', 'MapControls', 'NewPlaceL
     }
 
     function initialize(id, isDropable, scope, placeLocation) {
+        map = null;
         var mapOptions = {
             center: new google.maps.LatLng(MyLocation.lat, MyLocation.lng),
             zoom: 15,
@@ -353,25 +356,65 @@ touristmapServices.factory('YandexMap', ['MyLocation', 'MapControls', 'NewPlaceL
 
     function initialize(id, isDropable, scope, placeLocation) {
 
-        ymaps.geolocation.get({
-            mapStateAutoApply: true
-        }).then(function (result) {
+        //function test(result) {
+        //    map = null;
+        //    map = new ymaps.Map(id, {
+        //        center: [result.geoObjects.position[0], result.geoObjects.position[1]],
+        //        zoom: 15,
+        //        controls: []
+        //    });
+        //    map.geoObjects.add(result.geoObjects);
+        //    map.setZoom(15);
+        //    map.controls.add('geolocationControl', {float:'none', position:{bottom:30, right:10}});
+        //    map.controls.add('rulerControl', {float:'none', position:{bottom:30, left:10}});
+        //    map.controls.add(new ymaps.control.TypeSelector(['yandex#map', 'yandex#hybrid']), {float:'right'});
+        //
+        //    if(placeLocation) {
+        //        console.log(placeLocation);
+        //        goToPlace(placeLocation);
+        //    }
+        //}
+        //
+        //ymaps.geolocation.get({
+        //    mapStateAutoApply: true
+        //}).then(test);
+
+        map = null;
+
+        if(placeLocation) {
             map = new ymaps.Map(id, {
-                center: [result.geoObjects.position[0], result.geoObjects.position[1]],
+                center: [placeLocation.lat, placeLocation.lng],
+                zoom: 17,
+                controls: []
+            });
+            //map.geoObjects.add(result.geoObjects);
+
+            map.controls.add('geolocationControl', {float: 'none', position: {bottom: 30, right: 10}});
+            map.controls.add('rulerControl', {float: 'none', position: {bottom: 30, left: 10}});
+            map.controls.add(new ymaps.control.TypeSelector(['yandex#map', 'yandex#hybrid']), {float: 'right'});
+        } else {
+            map = new ymaps.Map(id, {
+                center: [MyLocation.lat, MyLocation.lng],
                 zoom: 15,
                 controls: []
             });
-            map.geoObjects.add(result.geoObjects);
-            map.setZoom(15);
-            map.controls.add('geolocationControl', {float:'none', position:{bottom:30, right:10}});
-            map.controls.add('rulerControl', {float:'none', position:{bottom:30, left:10}});
-            map.controls.add(new ymaps.control.TypeSelector(['yandex#map', 'yandex#hybrid']), {float:'right'});
-            //map.controls
-            //    .remove('rulerControl')
-            //    .remove('fullscreenControl')
-            //    .remove('searchControl')
-            //    .remove('typeSelector');
-        });
+
+            map.controls.add('geolocationControl', {float: 'none', position: {bottom: 30, right: 10}});
+            map.controls.add('rulerControl', {float: 'none', position: {bottom: 30, left: 10}});
+            map.controls.add(new ymaps.control.TypeSelector(['yandex#map', 'yandex#hybrid']), {float: 'right'});
+
+            ymaps.geolocation.get({
+                // Карта автоматически отцентрируется по положению пользователя.
+                mapStateAutoApply: true
+            }).then(function (result) {
+                MyLocation.lat = result.geoObjects.position[0];
+                MyLocation.lng = result.geoObjects.position[1];
+                map.geoObjects.add(result.geoObjects);
+                map.setCenter([MyLocation.lat, MyLocation.lng], 15, {
+                    checkZoomRange: true
+                });
+            });
+        }
 
 
         function placeMarker(location) {
@@ -396,12 +439,13 @@ touristmapServices.factory('YandexMap', ['MyLocation', 'MapControls', 'NewPlaceL
             }
         }
 
-        //function goToPlace(location) {
-        //    var pos = new google.maps.LatLng(location.lat,
-        //        location.lng);
-        //    map.panTo(pos);
-        //    map.setZoom(17);
-        //}
+        function goToPlace(location) {
+            console.log(map.getCenter());
+            map.setCenter([location.lat, location.lng], 20, {
+                checkZoomRange: true
+            });
+            console.log(map.getCenter());
+        }
     }
 
     function showMarkers(list, scope) {
@@ -409,19 +453,6 @@ touristmapServices.factory('YandexMap', ['MyLocation', 'MapControls', 'NewPlaceL
 
         var contentString = '<div><infowindow></infowindow></div>';
         var compiled = $compile(contentString)(scope);
-
-        var balloon = new ymaps.Balloon(map, {
-            closeButton: false,
-            minWidth: 500,
-            minHeight: 500
-        });
-
-        console.log(map.options);
-        //balloon.options.setParent(map.options);
-        //balloon.options.closeButton = false;
-        //balloon.options.minWidth = 500;
-        //balloon.options.minHeight = 500;
-        console.log(balloon.options);
 
 
         for(var i = 0; i < list.length; i++) {
@@ -461,24 +492,22 @@ touristmapServices.factory('YandexMap', ['MyLocation', 'MapControls', 'NewPlaceL
                 }
             }
 
-            markers[i] = new ymaps.Placemark([list[i].location.lat, list[i].location.lng], {
-                //balloonContent: compiled[0].innerHTML
-            }, {
+            var placemark = new ymaps.Placemark([list[i].location.lat, list[i].location.lng], {}, {
                 iconLayout: 'default#image',
                 iconImageHref: icon,
                 iconImageSize: [30, 45]
             });
 
-            markers[i].events.add("click", (function(place, scope, marker) {
+            placemark.events.add("click", (function(place, scope, marker) {
                 return function() {
                     scope.place = place;
                     scope.$apply();
                     marker.balloon.open();
                     marker.properties.set('balloonContent', compiled[0].innerHTML);
                 };
-            })(list[i], scope, markers[i]));
+            })(list[i], scope, placemark));
 
-            markers[i].events.add("balloonopen", function (event) {
+            placemark.events.add("balloonopen", function (event) {
                 $(document).foundation({
                     reveal: {
                         close_on_background_click: false,
@@ -486,20 +515,9 @@ touristmapServices.factory('YandexMap', ['MyLocation', 'MapControls', 'NewPlaceL
                     }
                 });
             });
-        }
 
-        map.events.add("click", function(e) {
-            console.log('qwe');
-            balloon.open(map.getCenter());
-            //map.balloon.open(
-            //    // Позиция балуна
-            //    e.get("coords"), {
-            //        // Свойства балуна:
-            //        // контент балуна
-            //        contentBody: "Значение: " + e.get("coords")
-            //    }
-            //)
-        });
+            markers.push(placemark);
+        }
 
         var clusterer = new ymaps.Clusterer();
         clusterer.add(markers);

@@ -244,10 +244,16 @@ ul {
 @media only screen and (min-width: 64.063em) {
     .info-window-content {
         max-width: 400px;
+        max-height: 400px;
     }
 
     div.short {
-        max-height: 250px;
+        max-height: 200px;
         overflow-y: auto;
     }
+}
+
+.ymaps-2-1-23-map *, .ymaps-2-1-23-map *:before, .ymaps-2-1-23-map *:after {
+    -moz-box-sizing: inherit !important;
+    box-sizing: inherit !important;
 }
