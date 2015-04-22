@@ -15,9 +15,7 @@ touristmapControllers.controller('MainController', ['$scope', 'GlobalMap', 'Plac
     }
 
     $scope.closeRoute = function() {
-        $('.off-canvas-wrap').removeClass('offcanvas-overlap-left');
         GlobalMap.closeRoute();
-        GlobalMap.setRoute(false);
     };
 
 }]);
@@ -32,9 +30,12 @@ touristmapControllers.controller('HomeController', ['$scope', 'GlobalMap', 'Plac
 
     Starter.start($scope, $routeParams);
 
+    $scope.isCanWalk = GlobalMap.isCanWalk();
+
     $scope.calcRoute = function(destination, type) {
+        console.log("ctrl route");
         GlobalMap.switchRoute(true);
-        $scope.infowindow.close();
+        GlobalMap.closeInfowindow($scope);
         GlobalMap.calcRoute(MyLocation, destination, type);
     };
 }]);

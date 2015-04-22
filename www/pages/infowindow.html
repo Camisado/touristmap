@@ -17,7 +17,7 @@
     <div class="row">
         <div class="small-12 columns">
             <hr>
-            <button class="success left small" ng-click="calcRoute(place.location,'WALKING')">{{ 'WALKING' | translate }}</button>
+            <button class="success left small" ng-show="isCanWalk" ng-click="calcRoute(place.location,'WALKING')">{{ 'WALKING' | translate }}</button>
             <button class="success right small" ng-click="calcRoute(place.location,'DRIVING')">{{ 'DRIVING' | translate }}</button>
         </div>
 

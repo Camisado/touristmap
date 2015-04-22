@@ -14,6 +14,14 @@
         <link rel="stylesheet" href="css/app.css" />
     </head>
     <body ng-controller="MainController">
+
+
+        <div id="modalSpinner" class="reveal-modal">
+            <div id="spinner" class="spinner" ></div>
+            <!--<h1 class="text-center">Loading</h1>-->
+        </div>
+
+
         <div class="off-canvas-wrap inherit-full-screen-height" data-offcanvas>
             <div class="inner-wrap inherit-full-screen-height">
                 <nav class="tab-bar">
@@ -94,6 +102,7 @@
 
 
         <script type="text/javascript">
+            $('#modalSpinner').foundation('reveal', 'open');
             app.checkLocalStorage();
             var script=document.createElement('script');
             if (GLOBAL_LANGUAGE === 'en') {

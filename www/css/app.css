@@ -257,3 +257,20 @@ ul {
     -moz-box-sizing: inherit !important;
     box-sizing: inherit !important;
 }
+
+.segment-panel {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #d8d8d8;
+    padding: 1.25rem;
+    background: #f2f2f2;
+    color: #333333;
+}
+
+#modalSpinner {
+    top: 50% !important;
+    background-color: rgba(255,255,255,0) !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: auto !important;
+}
