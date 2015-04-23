@@ -16,7 +16,7 @@
     <body ng-controller="MainController">
 
 
-        <div id="modalSpinner" class="reveal-modal">
+        <div id="modalSpinner" class="reveal-modal" data-reveal>
             <div id="spinner" class="spinner" ></div>
             <!--<h1 class="text-center">Loading</h1>-->
         </div>
@@ -76,6 +76,12 @@
             </div>
         </div>
 
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script src="js/foundation.min.js"></script>
+        <script type="application/javascript">
+            $('#modalSpinner').foundation('reveal', 'open');
+        </script>
+
         <script type="text/javascript" src="cordova.js"></script>
 
         <script src="bower_components/angular/angular.min.js"></script>
@@ -83,11 +89,7 @@
         <script src="bower_components/angular-animate/angular-animate.min.js"></script>
         <script src="bower_components/angular-translate/angular-translate.min.js"></script>
         <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
-
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-        <!--<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true&language=ru"></script>-->
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-        <!--<script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU&load=package.full" type="text/javascript"></script>-->
         <script src="bower_components/markerclustererplus/src/markerclusterer.js"></script>
 
         <script src="js/app/app.js"></script>
@@ -97,12 +99,8 @@
         <script src="js/app/filters.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
 
-        <script src="js/foundation.min.js"></script>
-        <!--<script src="js/foundation/foundation.reveal.js"></script>-->
-
 
         <script type="text/javascript">
-            $('#modalSpinner').foundation('reveal', 'open');
             app.checkLocalStorage();
             var script=document.createElement('script');
             if (GLOBAL_LANGUAGE === 'en') {

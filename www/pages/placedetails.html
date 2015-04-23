@@ -2,9 +2,15 @@
     <div class="small-12 columns panel">
         <h1>{{place.info.title}}</h1>
         <img id="photo" ng-src={{place.info.photo}} />
-        <p>{{place.info.description.short}}</p>
         <p>{{place.info.description.long}}</p>
-        <p><category></category></p>
+        <div class="row">
+            <div class="small-8 columns">
+                <p><category></category></p>
+            </div>
+            <div class="small-4 columns">
+                <button class="right small secondary" onclick="$(document).foundation('reveal', 'close');"> {{ 'BUTTON_CLOSE' | translate }} </button>
+            </div>
+        </div>
         <a class="close-reveal-modal">&#215;</a>
     </div>
 </div>

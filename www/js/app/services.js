@@ -290,6 +290,9 @@ touristmapServices.factory('GoogleMap', ['MyLocation', 'MapControls', 'NewPlaceL
         var mcOptions = {maxZoom: 16};
         mc = new MarkerClusterer(map, markers, mcOptions);
         google.maps.event.trigger(map, 'resize');
+
+        $('#modalSpinner').foundation('reveal', 'close');
+
         if(!Platform.isPC()) {
             spinnerplugin.hide();
         }
@@ -527,6 +530,7 @@ touristmapServices.factory('YandexMap', ['MyLocation', 'MapControls', 'NewPlaceL
         clusterer.add(markers);
         map.geoObjects.add(clusterer);
 
+        $('#modalSpinner').foundation('reveal', 'close');
         if(!Platform.isPC()) {
             spinnerplugin.hide();
         }
@@ -857,12 +861,40 @@ touristmapServices.factory('UI', ['$filter', function($filter){
         show(document.getElementById('goBackButton'));
     }
 
+    function selectLanguage(lang) {
+        if(lang === 'ru') {
+            document.getElementById('ru').className = 'th';
+            document.getElementById('en').className = '';
+        } else {
+            document.getElementById('en').className = 'th';
+            document.getElementById('ru').className = '';
+        }
+    }
+
+    function selectMap(m) {
+        if(m === 'google') {
+            document.getElementById('google').className = 'th';
+            document.getElementById('yandex').className = '';
+        } else {
+            document.getElementById('yandex').className = 'th';
+            document.getElementById('google').className = '';
+        }
+    }
+
+    function checkSettings() {
+        selectLanguage(GLOBAL_LANGUAGE);
+        selectMap(GLOBAL_MAP);
+    }
+
     return {
         uploadImageOnProgress: uploadImageOnProgress,
         uploadImageSuccess: uploadImageSuccess,
         uploadImageError: uploadImageError,
         addPlaceSuccess: addPlaceSuccess,
-        addPlaceError: addPlaceError
+        addPlaceError: addPlaceError,
+        selectLanguage: selectLanguage,
+        selectMap: selectMap,
+        checkSettings: checkSettings
     }
 }]);
 

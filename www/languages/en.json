@@ -2,6 +2,8 @@
   "BUTTON_TEXT_EN": "english",
   "BUTTON_TEXT_RU": "russian",
 
+  "BUTTON_CLOSE": "Close",
+
   "APP_NAME": "Tourist map Vitebsk",
 
   "MAIN_MENU": "Main menu",
@@ -50,6 +52,7 @@
 
   "CHANGE_LANGUAGE": "Change language",
   "CHANGE_MAP": "Change map",
+  "BUTTON_SAVE_CHANGES": "Save changes",
   "ABOUT_APP": "About application",
   "APP_DESCRIPTION": "Helper application for a tourist in the city of Vitebsk. It allows you to view on the map the most interesting places of tourist in the city. Read about them, get directions to them of the location. View all tourist destinations, find the right. And just to add a new e If it still is not on the map.",
   "APP_FEATURES": "Application is developed in the framework of a thesis on PhoneGap. Assumes no commercial value. Available for multiple platforms:",

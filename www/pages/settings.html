@@ -1,19 +1,23 @@
-<div class="row panel">
+<div id="settings" class="row panel">
     <div class="row">
         <div class="small-6 columns">
             <h2>{{ 'CHANGE_LANGUAGE' | translate }}:</h2>
-            <a href="" ng-click="language='ru'" ><img src="../www/img/icons/Russia.png"></a>
-            <a href="" ng-click="language='en'" ><img src="../www/img/icons/United-Kingdom.png"></a>
+            <div style="height: 75px">
+                <a id="ru" href="" ng-click="selectLanguage('ru')" ><img src="../www/img/icons/Russia.png"></a>
+                <a id="en" href="" ng-click="selectLanguage('en')" ><img src="../www/img/icons/United-Kingdom.png"></a>
+            </div>
         </div>
         <div class="small-6 columns">
             <h2>{{ 'CHANGE_MAP' | translate }}:</h2>
-            <a href="" ng-click="map='google'" ><img src="../www/img/icons/United-Kingdom.png"></a>
-            <a href="" ng-click="map='yandex'" ><img src="../www/img/icons/Russia.png"></a>
+            <div style="height: 75px">
+                <a id="google" href="" ng-click="selectMap('google')" ><img src="../www/img/icons/gmaps-logo.png"></a>
+                <a id="yandex" href="" ng-click="selectMap('yandex')" ><img src="../www/img/icons/ymaps-logo.png"></a>
+            </div>
         </div>
     </div>
     <div class="row">
-        <div class="small-12 columns">
-            <button ng-click="applySettings()">apply</button>
+        <div class="small-4 columns small-centered">
+            <button id="save" ng-click="saveSettings()">{{ 'BUTTON_SAVE_CHANGES' | translate }}</button>
         </div>
     </div>
     <hr>

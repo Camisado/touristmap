@@ -16,10 +16,10 @@
         <ul>
             <li class="my-animation panel" ng-repeat="place in list | orderBy:orderParam | filter:search as results ">
                 <div class="row">
-                    <div class="small-12 medium-3 columns cursor-pointer" data-reveal-id="placeDetailsModal" ng-click="toModalDetails(place);">
+                    <div class="small-12 medium-3 columns cursor-pointer" data-reveal-id="detailsModal" ng-click="toModalDetails(place);">
                         <img ng-src={{place.info.photo}}>
                     </div>
-                    <div class="small-12 medium-7 columns cursor-pointer" data-reveal-id="placeDetailsModal" ng-click="toModalDetails(place);">
+                    <div class="small-12 medium-7 columns cursor-pointer" data-reveal-id="detailsModal" ng-click="toModalDetails(place);">
                         <h3>{{place.info.title}}</h3>
                         <p>{{place.info.description.short}}</p>
                         <p><category></category></p>
@@ -29,7 +29,7 @@
                     </div>
                 </div>
             </li>
-            <div id="placeDetailsModal" class="reveal-modal full full-screen-width" data-reveal>
+            <div id="detailsModal" class="reveal-modal full full-screen-width" data-reveal>
                 <placedetails place="placeDetails"></placedetails>
             </div>
             <li ng-if="results.length==0">

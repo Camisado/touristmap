@@ -205,11 +205,22 @@ touristmapControllers.controller('AddPlaceController', ['$scope', 'GlobalMap', '
     goBackButton.addEventListener('click', goBack, false);
 }]);
 
-touristmapControllers.controller('SettingsController', ['$scope', 'GlobalMap', '$translate', function($scope, GlobalMap, $translate) {
+touristmapControllers.controller('SettingsController', ['$scope', 'GlobalMap', '$translate', 'UI', function($scope, GlobalMap, $translate, UI) {
     GlobalMap.switchRoute(false);
+    UI.checkSettings();
 
-    $scope.language = GLOBAL_LANGUAGE;
-    $scope.map = GLOBAL_MAP;
+    var language = GLOBAL_LANGUAGE;
+    var map = GLOBAL_MAP;
+
+    $scope.selectLanguage = function(lang) {
+        language = lang;
+        UI.selectLanguage(lang);
+    };
+
+    $scope.selectMap = function(m) {
+        map = m;
+        UI.selectMap(m)
+    };
 
     function changeLanguage(langKey) {
         $translate.use(langKey);
@@ -222,10 +233,10 @@ touristmapControllers.controller('SettingsController', ['$scope', 'GlobalMap', '
         localStorage.setItem('map', mapKey);
     }
 
-    $scope.applySettings = function() {
-        console.log($scope.language, $scope.map);
-        changeLanguage($scope.language);
-        changeMap($scope.map);
+    $scope.saveSettings = function() {
+        console.log(language, map);
+        changeLanguage(language);
+        changeMap(map);
         app.reloadApp();
     }
 }]);
