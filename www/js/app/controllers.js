@@ -143,7 +143,8 @@ touristmapControllers.controller('AddPlaceController', ['$scope', 'GlobalMap', '
         }
     });
 
-    $scope.maxLength = 150;
+    $scope.maxLengthTitle = 75;
+    $scope.maxLengthDesc = 150;
 
     $scope.categories = Category.list;
 

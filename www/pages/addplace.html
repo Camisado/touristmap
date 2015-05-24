@@ -30,8 +30,8 @@
     <div class="row">
         <div class="small-12 columns">
             <label>
-                {{ 'TITLE' | translate }} <small class="required-text">{{ 'REQUIRED' | translate }}</small>
-                <input id="title" name="title" type="text" placeholder="{{ 'PLACEHOLDER_TITLE' | translate }}" ng-model="place.info.title" />
+                {{ 'TITLE' | translate }}({{ 'CHARACTERS_LEFT' | translate }}: {{maxLengthTitle-place.info.description.short.length}}) <small class="required-text">{{ 'REQUIRED' | translate }}</small>
+                <input id="title" name="title" type="text" maxlength="{{maxLengthTitle}}" placeholder="{{ 'PLACEHOLDER_TITLE' | translate }}" ng-model="place.info.title" />
             </label>
 
         </div>
@@ -39,8 +39,8 @@
     <div class="row">
         <div class="small-12 columns">
             <label>
-                {{ 'SHORT_DESCRIPTION' | translate }}({{ 'CHARACTERS_LEFT' | translate }}: {{maxLength-place.info.description.short.length}}) <small class="required-text">{{ 'REQUIRED' | translate }}</small>
-                <input id="short_desc" name="short_desc" type="text" maxlength="{{maxLength}}" placeholder="{{ 'PLACEHOLDER_SHORT' | translate }}" ng-model="place.info.description.short" />
+                {{ 'SHORT_DESCRIPTION' | translate }}({{ 'CHARACTERS_LEFT' | translate }}: {{maxLengthDesc-place.info.description.short.length}}) <small class="required-text">{{ 'REQUIRED' | translate }}</small>
+                <input id="short_desc" name="short_desc" type="text" maxlength="{{maxLengthDesc}}" placeholder="{{ 'PLACEHOLDER_SHORT' | translate }}" ng-model="place.info.description.short" />
             </label>
         </div>
     </div>
